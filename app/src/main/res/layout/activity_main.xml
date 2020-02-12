@@ -24,17 +24,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:contentDescription="@string/app_name"
 
+        android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toTopOf="@+id/nombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="0.836" />
 
     <EditText
         android:id="@+id/nombre"
@@ -60,39 +61,28 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="24dp"
+        android:autofillHints=""
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:nextFocusDown="@id/num_sector"
+        android:nextFocusDown="@id/colonias_spinner"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/num_sector"
+        app:layout_constraintBottom_toTopOf="@+id/colonias_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
-
-    <EditText
-        android:id="@+id/num_sector"
-        android:layout_width="0dp"
+    <Spinner
+        android:id="@+id/colonias_spinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="24dp"
-        android:hint="Numero de sector(1 digito)"
-        android:inputType="number"
-        android:maxLength="1"
-        android:nextFocusDown="@id/contras"
-        android:textColor="@android:color/black"
+        android:entries="@array/colonias_registradas"
+        android:prompt="Selecciona tu colonia"
         app:layout_constraintBottom_toTopOf="@+id/contras"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" tools:targetApi="o" />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/contras"

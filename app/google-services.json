@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "209863613290",
+    "firebase_url": "https://micolonia-64d48.firebaseio.com",
+    "project_id": "micolonia-64d48",
+    "storage_bucket": "micolonia-64d48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209863613290:android:fa98c2a0500e422275e313",
+        "android_client_info": {
+          "package_name": "com.micolonia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209863613290-i9mkqicbmc4pd5ce0h6sm1lsp99p3n0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtUJhSctsmZFCsXSfW9b1W-RUBz4w9YOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209863613290-i9mkqicbmc4pd5ce0h6sm1lsp99p3n0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

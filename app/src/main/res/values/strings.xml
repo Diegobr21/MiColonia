@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MiColonia</string>
+    <string-array name="colonias_registradas">
+        <item>Las Hadas</item>
+        <item>--</item>
+
+    </string-array>
 </resources>
