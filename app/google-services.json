@@ -8,12 +8,49 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:209863613290:android:fa98c2a0500e422275e313",
+        "mobilesdk_app_id": "1:209863613290:android:e60c2070b670366775e313",
         "android_client_info": {
-          "package_name": "com.micolonia"
+          "package_name": "com.micolonia.app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "209863613290-i9mkqicbmc4pd5ce0h6sm1lsp99p3n0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtUJhSctsmZFCsXSfW9b1W-RUBz4w9YOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209863613290-i9mkqicbmc4pd5ce0h6sm1lsp99p3n0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209863613290:android:bdaf1e08dede202775e313",
+        "android_client_info": {
+          "package_name": "com.micomunidad.lashadas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209863613290-d31bgobh513co7vouu9cfre0qdb9t9bq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.micomunidad.lashadas",
+            "certificate_hash": "38adaa77a1eb5d28dfdd40c4553e5632cfbbf456"
+          }
+        },
         {
           "client_id": "209863613290-i9mkqicbmc4pd5ce0h6sm1lsp99p3n0o.apps.googleusercontent.com",
           "client_type": 3

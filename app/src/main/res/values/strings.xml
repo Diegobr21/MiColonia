@@ -1,8 +1,51 @@
 <resources>
-    <string name="app_name">MiColonia</string>
+    <string name="app_name">Mi Colonia</string>
+    <string name="contactanos">¡Contactanos, con gusto te atenderemos!</string>
+    <string name="x">¿Tienes alguna sugerencia?\n Es bienvenida, queremos brindarte la mejor experiencia posible</string>
+    <string name="x2">Dudas, Sugerencias y/o Informes:</string>
+    <string name="olvide"><u>Olvidé mi contraseña</u></string>
+    <string name="colonia_prompt">Selecciona tu colonia</string>
     <string-array name="colonias_registradas">
         <item>Las Hadas</item>
-        <item>--</item>
+        <item>Mision Anahuac</item>
 
     </string-array>
+
+
+    <string name="textopublicar">Publicar tiene un costo, ya sea un negocio de comida o de algún servicio, o quieras publicar una venta como particular. \n \n
+    Si ya te pusiste en contacto con nosotros, da clic en siguiente y llena el formato.\n\n Si no,
+    puedes llenar el formato y estar en lista de espera (máx. 1 - 2 días), ó igualmente, dar clic en contacto para comunicarte con nosotros</string>
+    <string name="terminosycondiciones">Términos y condiciones del usuario</string>
+    <string name="avisodeprivacidad1">La presente Política de Privacidad establece los términos en que Las_Hadas_App usa
+        y protege la información que es proporcionada por sus usuarios al momento de utilizar su aplicación.\n
+        Esta aplicación está comprometida con la seguridad de los datos de sus usuarios. \n
+        Cuando le pedimos llenar los campos de información personal con la cual usted pueda ser identificado,
+        lo hacemos asegurando que sólo se empleará de acuerdo con los términos de este documento.\n
+        Sin embargo, esta Política de Privacidad puede cambiar con el tiempo o ser actualizada por
+        lo que le recomendamos y enfatizamos revisar continuamente esta página\n para asegurarse
+        que está de acuerdo con dichos cambios.</string>
+    <string name="avisopriv2">Nuestra aplicación podrá recoger información personal, por ejemplo: Nombre,\n
+        información de contacto como su dirección de correo electrónica e información demográfica.</string>
+    <string name="avisopriv3">Nuestra aplicación emplea la información con el fin de proporcionar el mejor servicio posible,\n particularmente para mantener un registro de usuarios,
+        de pedidos en caso que aplique, y mejorar nuestro servicio. \nEs posible que sean enviados correos electrónicos,
+        estos correos electrónicos serán enviados a la dirección que usted proporcione y podrán ser cancelados en cualquier momento.\n \n
+
+Las_Hadas_App está altamente comprometida para cumplir con el compromiso de mantener su información segura.
+        \n Usamos los sistemas más avanzados y los actualizamos constantemente para asegurarnos que no exista ningún acceso no autorizado.</string>
+    <string name="avisopriv4">Esta aplicación no venderá, cederá ni distribuirá la información personal
+         sin su consentimiento, salvo que sea requerido por un juez con una orden judicial.\n \n
+
+Las_Hadas_App Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.\n \n
+
+Estos términos y el manejo de privacidad son aplicados y acatados a partir de julio del 2019.</string>
+    <string name="cerrses">Cerrar Sesión</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="avipriv">Aviso de Privacidad</string>
+    <string name="contacto">Contacto</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="publicar">Publicar</string>
+    <string name="avisos">Avisos de la Comunidad: </string>
+    <string name="comida">Comida cerca: </string>
+    <string name="servicios">Servicios cerca: </string>
+    <string name="ventas">Avisos de Ocasión: </string>
 </resources>

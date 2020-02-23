@@ -13,32 +13,40 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:contentDescription="Registro"
-        android:tint="@android:color/holo_orange_light"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/registrarse"
+        android:src="@drawable/micolonialogo"
+        app:layout_constraintBottom_toTopOf="@+id/nombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-
-        android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toTopOf="@+id/nombre"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.836" />
-
     <EditText
         android:id="@+id/nombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:hint="Nombre"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:nextFocusDown="@id/email"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.366"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,24 +54,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="24dp"
-        android:hint="Nombre"
-        android:inputType="textPersonName"
-        android:nextFocusDown="@id/email"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no" tools:targetApi="o" />
-
-
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        android:autofillHints=""
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:nextFocusDown="@id/colonias_spinner"
@@ -71,7 +61,8 @@
         app:layout_constraintBottom_toTopOf="@+id/colonias_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o" />
+
 
     <Spinner
         android:id="@+id/colonias_spinner"
@@ -79,39 +70,38 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:entries="@array/colonias_registradas"
-        android:prompt="Selecciona tu colonia"
+        android:prompt="@string/colonia_prompt"
         app:layout_constraintBottom_toTopOf="@+id/contras"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <EditText
         android:id="@+id/contras"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
+        android:autofillHints=""
         android:hint="Contraseña (al menos 6 caracteres)"
         android:inputType="textPassword"
         android:nextFocusDown="@id/re_contras"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/re_contras"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.681"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" tools:targetApi="o" />
-
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/re_contras"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="32dp"
+        android:autofillHints=""
         android:hint="Confirmar contraseña"
         android:inputType="textPassword"
         android:textColor="@android:color/black"
@@ -119,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/cargando"
@@ -141,15 +131,26 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/botoncircular"
         android:backgroundTint="@android:color/holo_red_light"
         android:text="Registrarse"
         android:textColor="@android:color/holo_orange_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_reg_inicio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_reg_inicio"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/botoncircular"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:text="Regresar a inicio"
+        android:textColor="@android:color/holo_orange_light"
+        app:layout_constraintBottom_toBottomOf="@+id/cargando"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

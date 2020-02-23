@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Formato_pub_comida">
+    <ImageView
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="130dp"
+        android:src="@drawable/logonegropng"
+        android:layout_width="130dp"
+        android:layout_height="100dp" />
+    <EditText
+        android:focusable="true"
+        android:nextFocusDown="@id/contac_formato"
+        android:id="@+id/Titulo"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="30dp"
+
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Titulo de Publicación"
+        android:maxLength="25"/>
+
+    <EditText
+        android:focusable="true"
+        android:nextFocusDown="@id/desc_formato"
+        android:id="@+id/contac_formato"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Contacto ej: Celular o Telefono"/>
+    <EditText
+        android:focusable="true"
+        android:nextFocusDown="@id/precio_formato"
+        android:id="@+id/desc_formato"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Descripcion General"/>
+
+    <EditText
+        android:id="@+id/precio_formato"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="$ Precio "/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:onClick="ToastGuardar"
+            android:text="Guardar"
+            android:textColor="@color/amarillo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_1"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Regresar a Inicio"
+            android:textColor="@color/amarillo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

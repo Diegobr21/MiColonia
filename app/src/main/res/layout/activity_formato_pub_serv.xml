@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Formato_pub_comida">
+    <ImageView
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="130dp"
+        android:src="@drawable/logonegropng"
+        android:layout_width="130dp"
+        android:layout_height="100dp" />
+    <EditText
+        android:nextFocusDown="@id/horarios_negcom"
+        android:id="@+id/nombre_negcom"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:textAlignment="center"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:hint="Nombre del negocio"
+        android:maxLength="25"/>
+    <EditText
+        android:nextFocusDown="@id/contac_negcom"
+        android:id="@+id/horarios_negcom"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:textAlignment="center"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:hint="Horarios Activos ej: Lun-Vie 11am-8pm"/>
+
+    <EditText
+        android:id="@+id/contac_negcom"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:hint="Contacto ej: Celular o Telefono"
+        android:inputType="text"
+        android:nextFocusDown="@id/desc_negcom"
+        android:textAlignment="center"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/desc_negcom"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:hint="Descripcion General del negocio (ej.): Carpintería General ó Cerrajero Profesional"
+        android:inputType="text" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:onClick="ToastGuardar"
+            android:text="Guardar"
+            android:textColor="@color/amarillo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Regresar a Inicio"
+            android:textColor="@color/amarillo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
