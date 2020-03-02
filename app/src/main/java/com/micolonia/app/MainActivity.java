@@ -27,8 +27,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     public EditText nombre, email,
             contras, re_contras;
-    public Spinner colonias_spinner;
-    public int id_colonia;
+    private Spinner colonias_spinner;
+    private int id_col, id_colonia_selected;
 
 
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btn_registrarse = findViewById(R.id.btn_registrarse);
         btn_reg_inicio = findViewById(R.id.btn_reg_inicio);
 
+
         btn_reg_inicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,27 +86,29 @@ public class MainActivity extends AppCompatActivity {
             re_contras.setError("La contraseña no coincide");
         }
 
-
-        String colonia = String.valueOf(colonias_spinner.getSelectedItem());
-
-        if (colonia == "Las Hadas"){
-            id_colonia=1;
+    }
+    public int getcol(){
+        CustomOnItemSelectedSpinner cisp = new CustomOnItemSelectedSpinner();
+        String colonia = colonias_spinner.getSelectedItem().toString();
+        if (colonia.equals("Las Hadas")){
+            id_col=1;
         }
-        else if(colonia == "Mision Anahuac"){
-            id_colonia=2;
+        else if(colonia.equals("Mision Anahuac")){
+            id_col=2;
         }
-
+        return id_col;
     }
 
     //  Hay que validar----------------------------------------------------------
     private void Registrar() {
 
+        id_colonia_selected = getcol();
 
         final String nombre = this.nombre.getText().toString().trim();
         final String email = this.email.getText().toString().trim();
         final String contras = this.contras.getText().toString().trim();
         final String re_contras = this.contras.getText().toString().trim();
-        final int id_colonia = this.id_colonia;
+        final int id_colonia = this.id_colonia_selected;
         final int tipo=1;
 
 //TODO: final id_colonia gets the correct input from the int

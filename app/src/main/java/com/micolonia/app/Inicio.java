@@ -7,8 +7,13 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -33,6 +38,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Inicio extends AppCompatActivity {
     private AdapterViewFlipper flip_inicio;
@@ -47,16 +53,11 @@ public class Inicio extends AppCompatActivity {
     private List<Aviso> arrayavisos;
     private List<Imagen> arrayimagenes;
 
-   // ImageView[] imagflipper;
-  /*  int[] imagflipper = {
-
-
-            R.drawable.food,
-            R.drawable.wreck,
-            R.drawable.foco
-    };
-*/
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private DocumentReference usuRef;
+    private String email_current_user;
+    public String current_colonia, colonia;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +65,20 @@ public class Inicio extends AppCompatActivity {
 
 
         getSupportActionBar().hide();
-
+    //Firebase
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        email_current_user=user.getEmail();
+        usuRef=db.collection("usuarios").document(user.getUid());
+
+        try{
+            colonia = gettingColonia();
+        }catch (Exception e){
+            colonia="1";
+        }
+
+//Toast.makeText(Inicio.this, "Num "+colonia, Toast.LENGTH_SHORT).show();
 
         refreshLayout=findViewById(R.id.refresh_layout_ini);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -78,13 +91,13 @@ public class Inicio extends AppCompatActivity {
         addData();
         addImages();
 
+
         publicar = (FloatingActionButton) findViewById(R.id.floatingpublicar);
         flip_inicio = (AdapterViewFlipper) findViewById(R.id.flipper);
         comida = findViewById(R.id.imgbtn_comida);
         servicio = findViewById(R.id.imgbtn_servicio);
         ventas =  findViewById(R.id.imgbtn_ventas);
-        //Toolbar iniciotoolbar=(androidx.appcompat.widget.Toolbar) findViewById(R.id.inicio_tool);
-      //  setSupportActionBar(iniciotoolbar);
+
 
         perfil = (ImageView) findViewById(R.id.btn_ing_perfil);
 
@@ -172,26 +185,36 @@ public class Inicio extends AppCompatActivity {
         startActivity(intentpublica);
     }
 
-  /*  private void initializeData() {
-        arrayavisos = new ArrayList<>();
-        arrayavisos.add(new Aviso("Hoy habra una reunion en el kiosko a las 7pm", R.drawable.wreck));
-        arrayavisos.add(new Aviso("Asalto ayer en el 7eleven a las 11pm", R.drawable.wreck));
-        arrayavisos.add(new Aviso("El Lunes 8 pasará la basura", R.drawable.wreck));
-        arrayavisos.add(new Aviso("Vecino, no olvides reciclar tu basura", R.drawable.food));
-        arrayavisos.add(new Aviso("En el 2do sector habra venta de electrodomesticos por parte de
-        arrayavisos.add(new Aviso("El alcalde hará una visita en 2 semanas", R.drawable.food));
-        arrayavisos.add(new Aviso("Campaña para planta de arboles inicia el 10 de Julio", R.drawable.food));
-        arrayavisos.add(new Aviso("Se un buen vecino!", R.drawable.food));
-    }
-
-    private void initializeAdapter() {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
-        recyclerView.setAdapter(adapter);
-    }
-*/
     /**
      * TODO: Aquí se lee la información desde Firebase y se muestra en Firebase.
      */
+    public String gettingColonia(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+                                 //documentSnapshot.getString("colonia");
+                                 //current_colonia=Integer.parseInt(cur_co);
+                            //Toast.makeText(Inicio.this, "Num "+current_colonia, Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(Inicio.this,"No existe el id_colonia del usaurio", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Inicio.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+
 
     private void addData() {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
@@ -200,13 +223,17 @@ public class Inicio extends AppCompatActivity {
         // logoID equivale a dos valores, usaremos números y en la app
         // evaluamos esos números para colocar la imagen correcta.
 
+        //Agarramos el id_colonia del usuario
+       //Toast.makeText(Inicio.this, "Num "+gettingColonia(), Toast.LENGTH_SHORT).show();
+
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando");
         progressDialog.show();
         refreshLayout.setRefreshing(false);
 
         db.collection("avisos")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .whereEqualTo("id_colonia", gettingColonia())
+                // .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -344,7 +371,8 @@ class Aviso {
     String imagen;
     String fecha;
     int tipo;
-    int id_colonia;
+    String id_colonia;
+    double timestamp;
     //Siempre un constructor vacio.
 
     public Aviso() {
@@ -397,11 +425,15 @@ class Aviso {
         this.tipo = tipo;
     }
 
-    public int getId_colonia() {
-        return id_colonia;
+    public String getId_colonia() { return id_colonia; }
+
+    public void setId_colonia(String id_colonia) { this.id_colonia = id_colonia; }
+
+    public double getTimestamp() {
+        return timestamp;
     }
 
-    public void setId_colonia(int id_colonia) {
-        this.id_colonia = id_colonia;
+    public void setTimestamp(double timestamp) {
+        this.timestamp = timestamp;
     }
 }

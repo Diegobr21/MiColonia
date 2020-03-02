@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,25 +14,41 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class Perfil extends AppCompatActivity {
     private Button cerrarsesion, ayuda, contacto, publicar, avisopriv;
     private TextView title;
     private FirebaseAuth mAuth;
-    private ImageButton back;
+    private ImageButton back, admin;
+    private DocumentReference usuRef;
+    private FirebaseFirestore db;
+   // private String email_current_user;
+    public String current_tipo;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
         getSupportActionBar().hide();
+        //Firebase
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        title=findViewById(R.id.textsaludo);
+        //email_current_user=user.getEmail();
+        usuRef=db.collection("usuarios").document(user.getUid());
 
+        title=findViewById(R.id.textsaludo);
         back= findViewById(R.id.imgbtn_back);
+        admin=findViewById(R.id.btn_admin);
 
         ayuda = (Button) findViewById(R.id.btn_ayuda);
         cerrarsesion = (Button) findViewById(R.id.btn_cerrarsesion);
@@ -39,7 +56,7 @@ public class Perfil extends AppCompatActivity {
         contacto = (Button) findViewById(R.id.btn_contacto);
 
 
-      title.setText("Perfil: "+ user.getEmail());
+        title.setText("Perfil: "+ user.getEmail());
 
         avisopriv = (Button) findViewById(R.id.btn_avisodeprivacidad);
 
@@ -54,6 +71,16 @@ public class Perfil extends AppCompatActivity {
             public void onClick(View v) {
 
                 backto(intentremitente);
+            }
+        });
+
+        //ADMIN STUFF
+        admin.setVisibility(View.GONE);
+        gettingTipo();
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Perfil.this, "Welcome admin", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -96,6 +123,36 @@ public class Perfil extends AppCompatActivity {
                 avisoprivacidad();
             }
         });
+    }
+
+
+
+    public String gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                admin.setVisibility(View.VISIBLE);
+                            }
+
+                        }else{
+                            Toast.makeText(Perfil.this,"No existe el id_colonia del usaurio", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Perfil.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_tipo;
     }
 
     private void fueradeapp() {

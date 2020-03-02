@@ -24,7 +24,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginEnd="8dp"
-                    android:src="@drawable/hada"
+                    android:src="@drawable/casa_yellow"
                     android:tint="@android:color/holo_orange_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textsaludo" />
