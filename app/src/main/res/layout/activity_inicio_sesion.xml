@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bckgnd"
     android:fillViewport="true">
 
 
@@ -19,36 +20,22 @@
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="match_parent"
+            android:layout_width="270dp"
             android:layout_height="230dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/app_name"
             android:src="@drawable/micolonialogo1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-        </ImageView>
-
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
 
         <ImageView
             android:id="@+id/imageView8"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/slogancolonia"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/slogan_adobe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView7">
-
-        </ImageView>
-
-
-
+            app:layout_constraintTop_toBottomOf="@+id/imageView7"></ImageView>
 
         <ProgressBar
             android:id="@+id/cargandoinicio"
@@ -66,15 +53,17 @@
             android:id="@+id/btn_ingresar"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="80dp"
             android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_dark"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:text="Ingresar"
-            android:textStyle="bold"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contras_login_layout" />
 
         <TextView
             android:id="@+id/textView2"
@@ -82,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="16dp"
-            android:text="¿No tienes cuenta? Registrate"
+            android:text="¿No tienes cuenta? Regístrate"
             android:textStyle="bold"
             android:textSize="17sp"
             android:textColor="@color/black"
@@ -94,12 +83,12 @@
             android:id="@+id/btn_aregistrarse"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/botoncircular"
-            android:backgroundTint="@color/azul"
+            android:backgroundTint="@color/colorPrimary2"
             android:text="Registrarse"
-            android:textStyle="bold"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -111,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/olvide"
-            android:textColor="@android:color/holo_orange_dark"
+            android:textColor="@android:color/holo_red_dark"
             android:textSize="17sp"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,40 +112,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="5dp"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/btn_ingresar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_log_layout"
             app:passwordToggleEnabled="true"
-            tools:targetApi="o" >
+            tools:targetApi="o">
+
             <EditText
                 android:id="@+id/contras_log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:hint="Contraseña"
-                android:nextFocusDown="@id/btn_ingresar"
                 android:inputType="textPassword"
+                android:nextFocusDown="@id/btn_ingresar"
                 android:textColor="@color/colorPrimaryDark"
                 android:textColorHint="@color/colorPrimaryDark"
-                tools:targetApi="o" ></EditText>
+                tools:targetApi="o"></EditText>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-           android:id="@+id/email_log_layout"
+            android:id="@+id/email_log_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="5dp"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/contras_login_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView8">

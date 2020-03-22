@@ -5,24 +5,19 @@
     <string name="x2">Dudas, Sugerencias y/o Informes:</string>
     <string name="olvide"><u>Olvidé mi contraseña</u></string>
     <string name="colonia_prompt">Selecciona tu colonia</string>
-    <string-array name="colonias_registradas">
-        <item>Las Hadas</item>
-        <item>Mision Anahuac</item>
-
-    </string-array>
-
-
     <string name="textopublicar">Publicar tiene un costo, ya sea un negocio de comida o de algún servicio, o quieras publicar una venta como particular. \n \n
     Si ya te pusiste en contacto con nosotros, da clic en siguiente y llena el formato.\n\n Si no,
     puedes llenar el formato y estar en lista de espera (máx. 1 - 2 días), ó igualmente, dar clic en contacto para comunicarte con nosotros</string>
+
+
     <string name="terminosycondiciones">Términos y condiciones del usuario</string>
-    <string name="avisodeprivacidad1">La presente Política de Privacidad establece los términos en que Las_Hadas_App usa
-        y protege la información que es proporcionada por sus usuarios al momento de utilizar su aplicación.\n
+    <string name="avisodeprivacidad1">La presente Política de Privacidad establece los términos en que MiColonia_App usa
+        y protege la información que es proporcionada por sus usuarios al momento de utilizar la aplicación.\n
         Esta aplicación está comprometida con la seguridad de los datos de sus usuarios. \n
-        Cuando le pedimos llenar los campos de información personal con la cual usted pueda ser identificado,
-        lo hacemos asegurando que sólo se empleará de acuerdo con los términos de este documento.\n
+        Cuando le pedimos llenar los campos de información personal con la cual usted puede ser identificado,
+        lo hacemos asegurando que sólo se empleará de acuerdo con los términos debidos.\n
         Sin embargo, esta Política de Privacidad puede cambiar con el tiempo o ser actualizada por
-        lo que le recomendamos y enfatizamos revisar continuamente esta página\n para asegurarse
+        lo que le recomendamos y enfatizamos revisar continuamente la página de Términos\n y condiciones para asegurarse
         que está de acuerdo con dichos cambios.</string>
     <string name="avisopriv2">Nuestra aplicación podrá recoger información personal, por ejemplo: Nombre,\n
         información de contacto como su dirección de correo electrónica e información demográfica.</string>
@@ -48,4 +43,9 @@ Estos términos y el manejo de privacidad son aplicados y acatados a partir de j
     <string name="comida">Comida cerca: </string>
     <string name="servicios">Servicios cerca: </string>
     <string name="ventas">Avisos de Ocasión: </string>
+    <string-array name="colonias_registradas">
+        <item>Las Hadas</item>
+        <item>Mision Anahuac</item>
+
+    </string-array>
 </resources>

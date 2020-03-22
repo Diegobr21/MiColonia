@@ -7,8 +7,13 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -34,6 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class seccion_servicios extends AppCompatActivity implements RecyclerViewAdapter_servicios.OnNegocioSerListener {
     private AdapterViewFlipper flip_servicios;
@@ -46,13 +52,11 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
     private List<NegocioSer> arrayservicios;
     private List<Imagen> arrayimagenes;
 
-   /* int[] imagflipper_ser = {
-            R.drawable.food,
-            R.drawable.wreck,
-            R.drawable.foco
-    };
-*/
+    public String current_colonia;
+
+    private DocumentReference usuRef;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +64,11 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
 
         getSupportActionBar().hide();
 
+        //Firebase
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        usuRef=db.collection("usuarios").document(user.getUid());
 
         refreshLayout=findViewById(R.id.refresh_layout_serv);
         recyclerView_ser = (RecyclerView) findViewById(R.id.recyclerView_servicios);
@@ -69,7 +77,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         recyclerView_ser.setLayoutManager(layoutManager);
         RecyclerViewAdapter_servicios adapter_servicios = new RecyclerViewAdapter_servicios(arrayservicios, this);
 
-        addData();
+        gettingColonia();
         addImages();
 
         publicar = findViewById(R.id.floatingpublicar);
@@ -81,7 +89,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                addData();
+                gettingColonia();
                 addImages();
             }
         });
@@ -136,8 +144,33 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
     /**
      * TODO: Aquí se lee la información desde Firebase y se muestra en Firebase.
      */
+    public String gettingColonia(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-    private void addData() {
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+                            addData(current_colonia);
+
+                        }else{
+                            Toast.makeText(seccion_servicios.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(seccion_servicios.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+
+
+    private void addData(String colonia_s) {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
         // Usando el objeto Aviso, su estructura es así:
         // {name: "Nombre", logoId: 1}
@@ -149,33 +182,66 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         progressDialog.show();
         refreshLayout.setRefreshing(false);
 
-        db.collection("servicios")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                //.whereEqualTo("visible", 1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            arrayservicios = new ArrayList<>();
+        if(colonia_s.equals("1")){
+            db.collection("servicios_las_hadas")
+                    //.whereEqualTo("id_colonia", colonia_s)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    //.whereEqualTo("visible", 1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayservicios = new ArrayList<>();
 
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                NegocioSer negocioSer = doc.toObject(NegocioSer.class);
-                                arrayservicios.add(negocioSer);
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    NegocioSer negocioSer = doc.toObject(NegocioSer.class);
+                                    arrayservicios.add(negocioSer);
+                                }
+
+                                RecyclerViewAdapter_servicios adapter_servicios = new RecyclerViewAdapter_servicios(
+                                        arrayservicios, seccion_servicios.this
+                                );
+                                recyclerView_ser.setAdapter(adapter_servicios);
+                            } else {
+                                Toast.makeText(seccion_servicios.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
                             }
 
-                            RecyclerViewAdapter_servicios adapter_servicios = new RecyclerViewAdapter_servicios(
-                                    arrayservicios, seccion_servicios.this
-                            );
-                            recyclerView_ser.setAdapter(adapter_servicios);
-                        } else {
-                            Toast.makeText(seccion_servicios.this, "Error", Toast.LENGTH_SHORT).show();
-                            refreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
                         }
+                    });
+        }else if(colonia_s.equals("2")){
+            db.collection("servicios_mision_anahuac")
+                    //.whereEqualTo("id_colonia", colonia_s)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    //.whereEqualTo("visible", 1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayservicios = new ArrayList<>();
 
-                        progressDialog.dismiss();
-                    }
-                });
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    NegocioSer negocioSer = doc.toObject(NegocioSer.class);
+                                    arrayservicios.add(negocioSer);
+                                }
+
+                                RecyclerViewAdapter_servicios adapter_servicios = new RecyclerViewAdapter_servicios(
+                                        arrayservicios, seccion_servicios.this
+                                );
+                                recyclerView_ser.setAdapter(adapter_servicios);
+                            } else {
+                                Toast.makeText(seccion_servicios.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+
     }
     public void addImages(){
         db.collection("imagenes")
@@ -293,7 +359,7 @@ class NegocioSer implements Parcelable {
 
     String name;
     int logoId;
-    int id_colonia;
+    String id_colonia;
     String imagen;
     String telefono;
     String descripcion;
@@ -315,7 +381,7 @@ class NegocioSer implements Parcelable {
     protected NegocioSer(Parcel in) {
         name = in.readString();
         logoId = in.readInt();
-        id_colonia = in.readInt();
+        id_colonia = in.readString();
         imagen = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
@@ -334,7 +400,7 @@ class NegocioSer implements Parcelable {
 
         dest.writeString(name);
         dest.writeInt(logoId);
-        dest.writeInt(id_colonia);
+        dest.writeString(id_colonia);
         dest.writeString(imagen);
         dest.writeString(telefono);
         dest.writeString(descripcion);
@@ -380,11 +446,11 @@ class NegocioSer implements Parcelable {
         this.logoId = logoId;
     }
 
-    public int getId_colonia() {
+    public String getId_colonia() {
         return id_colonia;
     }
 
-    public void setId_colonia(int id_colonia) {
+    public void setId_colonia(String id_colonia) {
         this.id_colonia = id_colonia;
     }
 

@@ -10,7 +10,7 @@
     <ImageView
         android:layout_marginTop="30dp"
         android:layout_marginLeft="130dp"
-        android:src="@drawable/logonegropng"
+        android:src="@drawable/micolonialogo1"
         android:layout_width="130dp"
         android:layout_height="100dp" />
     <EditText

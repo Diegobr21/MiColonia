@@ -47,6 +47,7 @@ class RecyclerViewAdapter_comida extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
+
     @Override
     public NegocioComViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cartas_comida, parent, false);

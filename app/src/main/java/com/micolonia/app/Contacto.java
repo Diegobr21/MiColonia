@@ -20,7 +20,7 @@ import android.widget.Toast;
 public class Contacto extends AppCompatActivity {
     public static final int REQUEST_CALL = 1;
     private Button btnregresar;
-    TextView contactanos, telefono1,telefono2, txtgmail;
+    TextView telefono1,telefono2, txtgmail;
     ImageView tel, wha, gmail;
     String stel1="+5218116802827";
     String stel2="+5218181130263";
@@ -32,7 +32,6 @@ public class Contacto extends AppCompatActivity {
         setContentView(R.layout.activity_contacto);
         getSupportActionBar().hide();
         btnregresar = findViewById(R.id.btn_regresar);
-        contactanos = findViewById(R.id.Contactanos);
         tel = findViewById(R.id.img_tel);
         wha = findViewById(R.id.wha);
         telefono1= findViewById(R.id.txt_phone);

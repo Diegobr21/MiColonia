@@ -25,12 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class Perfil extends AppCompatActivity {
-    private Button cerrarsesion, ayuda, contacto, publicar, avisopriv;
+    private Button cerrarsesion, ayuda, contacto, publicar, avisopriv, generar_qr;
     private TextView title;
-    private FirebaseAuth mAuth;
     private ImageButton back, admin;
     private DocumentReference usuRef;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
    // private String email_current_user;
     public String current_tipo;
 
@@ -50,6 +50,7 @@ public class Perfil extends AppCompatActivity {
         back= findViewById(R.id.imgbtn_back);
         admin=findViewById(R.id.btn_admin);
 
+        generar_qr = findViewById(R.id.generar_qr);
         ayuda = (Button) findViewById(R.id.btn_ayuda);
         cerrarsesion = (Button) findViewById(R.id.btn_cerrarsesion);
         publicar = (Button) findViewById(R.id.btn_a_publicar);
@@ -81,6 +82,7 @@ public class Perfil extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(Perfil.this, "Welcome admin", Toast.LENGTH_LONG).show();
+                toAdminLayout();
             }
         });
 
@@ -142,7 +144,7 @@ public class Perfil extends AppCompatActivity {
                             }
 
                         }else{
-                            Toast.makeText(Perfil.this,"No existe el id_colonia del usaurio", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Perfil.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -193,6 +195,12 @@ public class Perfil extends AppCompatActivity {
         Intent intent2 = new Intent(this, Publicar.class);
 
         startActivity(intent2);
+    }
+
+    private void toAdminLayout(){
+        Intent intentadmin = new Intent(this, Admin.class);
+
+        startActivity(intentadmin);
     }
 
     private void contacto() {

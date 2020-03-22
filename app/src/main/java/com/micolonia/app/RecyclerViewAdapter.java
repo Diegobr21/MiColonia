@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.AvisosViewHolder> {
     private final List<Aviso> arrayavisos;
 
@@ -43,6 +44,10 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Aviso
         return cvh;
     }
 
+    public void oD(int position){
+
+    }
+
     @Override
     public void onBindViewHolder(AvisosViewHolder holder, int position) {
         holder.titulo_aviso.setText(arrayavisos.get(position).name);
@@ -70,7 +75,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Aviso
             holder.Logo.setImageResource(R.drawable.reciclaje);
         }
         else{
-            holder.Logo.setImageResource(R.drawable.logonegropng);
+            holder.Logo.setImageResource(R.drawable.micolonialogo1);
         }
     }
 

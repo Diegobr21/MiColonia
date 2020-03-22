@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@drawable/bckgnd1"
     tools:context=".seccion_servicios"
     >
     <com.google.android.material.appbar.AppBarLayout
@@ -110,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_margin="8dp"
+                android:background="@drawable/botoncircular"
                 android:onClick="onFlipperArrowLeftClick"
                 android:padding="12dp"
                 android:src="@drawable/ic_arrow_back_black_24dp" />
@@ -121,6 +123,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="8dp"
+                android:background="@drawable/botoncircular"
                 android:onClick="onFlipperArrowRightClick"
                 android:padding="12dp"
                 android:src="@drawable/ic_arrow_forward_black_24dp" />

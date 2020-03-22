@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bckgnd"
+    tools:context=".Aviso_Admin">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Avisos de Jefe de Colonos"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
+
+    <EditText
+        android:id="@+id/contenido_aviso"
+        android:layout_width="330dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:hint="Contenido"
+        android:importantForAutofill="no"
+        android:inputType="textLongMessage"
+        android:maxLength="150"
+        android:nextFocusDown="@id/fecha_aviso"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/fecha_aviso"
+        android:layout_width="330dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="24dp"
+        android:textAlignment="center"
+        android:hint="dia/mes/año"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:nextFocusDown="@id/btn_publicar_aviso_admin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contenido_aviso"
+        tools:targetApi="o" />
+
+    <Button
+        android:id="@+id/btn_publicar_aviso_admin"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/botoncircular"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Publicar"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fecha_aviso"></Button>
+
+    <Button
+        android:id="@+id/rgr_inicio"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/botoncircular"
+        android:backgroundTint="@color/colorPrimary2"
+        android:text="Regresar a Inicio"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_publicar_aviso_admin"></Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

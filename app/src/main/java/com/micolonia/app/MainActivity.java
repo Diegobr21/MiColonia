@@ -26,9 +26,9 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     public EditText nombre, email,
-            contras, re_contras;
+            contras, re_contras, num_Calle, nombre_Calle;
     private Spinner colonias_spinner;
-    private int id_col, id_colonia_selected;
+    private String id_col, id_colonia_selected;
 
 
 
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         colonias_spinner = (Spinner) findViewById(R.id.colonias_spinner);
         colonias_spinner.setOnItemSelectedListener(new CustomOnItemSelectedSpinner());
 
+        num_Calle = findViewById(R.id.num_calle_txt);
+        nombre_Calle = findViewById(R.id.nombre_calle_txt);
         contras = findViewById(R.id.contras);
         re_contras = findViewById(R.id.re_contras);
         btn_registrarse = findViewById(R.id.btn_registrarse);
@@ -87,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public int getcol(){
+    public String getcol(){
         CustomOnItemSelectedSpinner cisp = new CustomOnItemSelectedSpinner();
         String colonia = colonias_spinner.getSelectedItem().toString();
         if (colonia.equals("Las Hadas")){
-            id_col=1;
+            id_col="1";
         }
         else if(colonia.equals("Mision Anahuac")){
-            id_col=2;
+            id_col="2";
         }
         return id_col;
     }
@@ -104,12 +106,15 @@ public class MainActivity extends AppCompatActivity {
 
         id_colonia_selected = getcol();
 
-        final String nombre = this.nombre.getText().toString().trim();
+        final String nombre = this.nombre.getText().toString().toUpperCase().trim();
         final String email = this.email.getText().toString().trim();
         final String contras = this.contras.getText().toString().trim();
+        final String num_calle = this.num_Calle.getText().toString().trim();
+        final String nombre_calle = this.nombre_Calle.getText().toString().toUpperCase().trim();
         final String re_contras = this.contras.getText().toString().trim();
-        final int id_colonia = this.id_colonia_selected;
+        final String id_colonia = this.id_colonia_selected;
         final int tipo=1;
+        final String status = "pagado";
 
 //TODO: final id_colonia gets the correct input from the int
 
@@ -124,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(nombre)) {
             Toast.makeText(this, "Ingrese un nombre de ususario", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(nombre_calle)) {
+            Toast.makeText(this, "Ingrese el nombre de su calle", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(num_calle)) {
+            Toast.makeText(this, "Ingrese su numero de exterior", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(contras)) {
@@ -161,7 +174,10 @@ public class MainActivity extends AppCompatActivity {
                             datos.put("nombre", nombre);
                             datos.put("email", email);
                             datos.put("colonia", id_colonia);
+                            datos.put("nombre_calle", nombre_calle);
+                            datos.put("num_calle", num_calle);
                             datos.put("tipo", tipo);
+                            datos.put("status", status);
 
 
 
@@ -212,6 +228,63 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
+        if (id_colonia_selected.equals("1")){
+            db.collection("las_hadas")
+                    .document(user.getUid())
+                    .set(datos)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                progressDialog.dismiss();
+                                Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
+                                        Toast.LENGTH_SHORT).show();
+
+                                //   cargando.setVisibility(View.GONE);
+
+                                iniciarsesion();
+                            } else {
+                                progressDialog.dismiss();
+                                user.delete();
+
+                                Toast.makeText(MainActivity.this, "Fallo el registro, verifique sus datos",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    });
+
+        }
+        else if(id_colonia_selected.equals("2")){
+            db.collection("mision_anahuac")
+                    .document(user.getUid())
+                    .set(datos)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                progressDialog.dismiss();
+                                Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
+                                        Toast.LENGTH_SHORT).show();
+
+                                //   cargando.setVisibility(View.GONE);
+
+                                iniciarsesion();
+                            } else {
+                                progressDialog.dismiss();
+                                user.delete();
+
+                                Toast.makeText(MainActivity.this, "Fallo el registro, verifique sus datos",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    });
+        }
+
     }
 
 
@@ -220,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         Intent int1 = new Intent(this, InicioSesion.class);
 
         startActivity(int1);
+        finish();
     }
 
     public void Regresar_inicio() {

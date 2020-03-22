@@ -7,11 +7,18 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
@@ -36,6 +43,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class seccion_ventas extends AppCompatActivity implements RecyclerViewAdapter_ventas.OnVentaListener {
     public AdapterViewFlipper flip_ventas;
@@ -50,9 +58,11 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
     private List<Venta> arrayventas;
     private List<Imagen> arrayimagenes;
 
+    public String current_colonia;
 
+    private DocumentReference usuRef;
     private FirebaseFirestore db;
-
+    private FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +70,11 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
 
         getSupportActionBar().hide();
 
+        //Firebase
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        usuRef=db.collection("usuarios").document(user.getUid());
 
        // prueba = findViewById(R.id.imgprueba);
         refreshLayout=findViewById(R.id.refresh_layout_ven);
@@ -70,7 +84,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
         recyclerView_ven.setLayoutManager(layoutManager);
         RecyclerViewAdapter_ventas adapter_ventas = new RecyclerViewAdapter_ventas(arrayventas, this);
 
-        addData();
+        gettingColonia(0);
         addImages();
 
         //mostrarbienes();
@@ -81,10 +95,11 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
         perfil= findViewById(R.id.btn_ing_perfil);
         bienesraices = findViewById(R.id.switch_bienes);
 
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                addData();
+                gettingColonia(0);
                 addImages();
             }
         });
@@ -102,10 +117,10 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
            @Override
            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                if(isChecked==true){
-                mostrarbienes();
+                gettingColonia(1);
                }
                else{
-                addData();
+                   gettingColonia(0);
                }
            }
        });
@@ -160,7 +175,37 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
      * TODO: Aquí se lee la información desde Firebase y se muestra en Firebase.
      */
 
-    private void addData() {
+    public String gettingColonia(final int x){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+
+                                if(x==0){
+                                    addData(current_colonia);
+                                }else {
+                                    mostrarbienes(current_colonia);
+                                }
+
+
+                        }else{
+                            Toast.makeText(seccion_ventas.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(seccion_ventas.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+    private void addData(String colonia_v) {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
         // Usando el objeto Aviso, su estructura es así:
         // {name: "Nombre", logoId: 1}
@@ -172,71 +217,145 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
         progressDialog.show();
         refreshLayout.setRefreshing(false);
 
-        db.collection("ventas")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                //.whereEqualTo("visible", 1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            arrayventas = new ArrayList<>();
+        if(colonia_v.equals("1")){
+            db.collection("ventas_las_hadas")
+                    //.whereEqualTo("id_colonia", colonia_v)
+                    //.whereGreaterThan("aprobado", 0)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayventas = new ArrayList<>();
 
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                Venta venta = doc.toObject(Venta.class);
-                                arrayventas.add(venta);
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Venta venta = doc.toObject(Venta.class);
+                                    arrayventas.add(venta);
+                                }
+
+
+                                RecyclerViewAdapter_ventas adapter_ventas =
+                                        new RecyclerViewAdapter_ventas(arrayventas,
+                                                seccion_ventas.this);
+                                recyclerView_ven.setAdapter(adapter_ventas);
+                            } else {
+                                Toast.makeText(seccion_ventas.this, "Error, puede que no haya avisos de ocasión de este tipo",
+                                        Toast.LENGTH_LONG).show();
+                                refreshLayout.setRefreshing(false);
                             }
 
-
-                            RecyclerViewAdapter_ventas adapter_ventas =
-                                    new RecyclerViewAdapter_ventas(arrayventas,
-                                    seccion_ventas.this);
-                            recyclerView_ven.setAdapter(adapter_ventas);
-                        } else {
-                            Toast.makeText(seccion_ventas.this, "Error, puede que no haya avisos de ocasión de este tipo",
-                                    Toast.LENGTH_LONG).show();
-                            refreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
                         }
+                    });
+        }else if(colonia_v.equals("2")){
+            db.collection("ventas_mision_anahuac")
+                    //.whereEqualTo("id_colonia", colonia_v)
+                    //.whereGreaterThan("aprobado", 0)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayventas = new ArrayList<>();
 
-                        progressDialog.dismiss();
-                    }
-                });
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Venta venta = doc.toObject(Venta.class);
+                                    arrayventas.add(venta);
+                                }
+
+
+                                RecyclerViewAdapter_ventas adapter_ventas =
+                                        new RecyclerViewAdapter_ventas(arrayventas,
+                                                seccion_ventas.this);
+                                recyclerView_ven.setAdapter(adapter_ventas);
+                            } else {
+                                Toast.makeText(seccion_ventas.this, "Error, puede que no haya avisos de ocasión de este tipo",
+                                        Toast.LENGTH_LONG).show();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+
     }
 
-    private void mostrarbienes(){
+
+
+    private void mostrarbienes(String colonia_v){
         final ProgressDialog progressDialog2 = new ProgressDialog(this);
         progressDialog2.setMessage("Cargando");
         progressDialog2.show();
 
-        db.collection("ventas")
-                .whereGreaterThan("idType", 1)
-                .orderBy("idType")
-                //.whereEqualTo("visible", 1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            arrayventas = new ArrayList<>();
-                            refreshLayout.setRefreshing(false);
+        if(colonia_v.equals("1")){
+            db.collection("ventas_las_hadas")
+                    //.orderBy("idType")
+                    //.orderBy("timestamp")
+                    .whereEqualTo("idType", 2)
+                    //.startAt(2)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayventas = new ArrayList<>();
+                                refreshLayout.setRefreshing(false);
 
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                Venta venta = doc.toObject(Venta.class);
-                                arrayventas.add(venta);
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Venta venta = doc.toObject(Venta.class);
+                                    arrayventas.add(venta);
+                                }
+
+                                RecyclerViewAdapter_ventas adapter_ventas = new RecyclerViewAdapter_ventas(arrayventas,
+                                        seccion_ventas.this);
+                                recyclerView_ven.setAdapter(adapter_ventas);
+                            }
+                            else {
+                                Toast.makeText(seccion_ventas.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
                             }
 
-                            RecyclerViewAdapter_ventas adapter_ventas = new RecyclerViewAdapter_ventas(arrayventas,
-                                    seccion_ventas.this);
-                            recyclerView_ven.setAdapter(adapter_ventas);
-                        } else {
-                            Toast.makeText(seccion_ventas.this, "Error", Toast.LENGTH_SHORT).show();
-                            refreshLayout.setRefreshing(false);
+                            progressDialog2.dismiss();
                         }
+                    });
+        }else if(colonia_v.equals("2")){
+            db.collection("ventas_mision_anahuac")
+                    //.orderBy("idType")
+                    .orderBy("timestamp")
+                    .whereGreaterThan("idType", 1)
+                    //.startAt(2)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayventas = new ArrayList<>();
+                                refreshLayout.setRefreshing(false);
 
-                        progressDialog2.dismiss();
-                    }
-                });
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Venta venta = doc.toObject(Venta.class);
+                                    arrayventas.add(venta);
+                                }
+
+                                RecyclerViewAdapter_ventas adapter_ventas = new RecyclerViewAdapter_ventas(arrayventas,
+                                        seccion_ventas.this);
+                                recyclerView_ven.setAdapter(adapter_ventas);
+                            }
+                            else {
+                                Toast.makeText(seccion_ventas.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            progressDialog2.dismiss();
+                        }
+                    });
+        }
+
     }
+
 
     public void addImages(){
         db.collection("imagenes")
@@ -357,13 +476,14 @@ class Venta implements Parcelable {
 
     String name;
     int logoId;
-    int id_colonia;
+    String id_colonia;
     String imagen;
     String descripcion;
     String costo;
    // String titulo;
     int tipo;
     String telefono;
+    int aprobado;
 
     Venta(String name, int logoId) {
         this.name = name;
@@ -376,12 +496,13 @@ class Venta implements Parcelable {
     protected Venta(Parcel in) {
         name = in.readString();
         logoId = in.readInt();
-        id_colonia = in.readInt();
+        id_colonia = in.readString();
         tipo = in.readInt();
         imagen = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
         costo = in.readString();
+        aprobado = in.readInt();
       //  titulo = in.readString();
 
 
@@ -392,12 +513,13 @@ class Venta implements Parcelable {
 
         dest.writeString(name);
         dest.writeInt(logoId);
-        dest.writeInt(id_colonia);
+        dest.writeString(id_colonia);
         dest.writeInt(tipo);
         dest.writeString(imagen);
         dest.writeString(telefono);
         dest.writeString(descripcion);
         dest.writeString(costo);
+        dest.writeInt(aprobado);
        // dest.writeString(titulo);
 
     }
@@ -433,11 +555,11 @@ class Venta implements Parcelable {
         this.logoId = logoId;
     }
 
-    public int getId_colonia() {
+    public String getId_colonia() {
         return id_colonia;
     }
 
-    public void setId_colonia(int id_colonia) {
+    public void setId_colonia(String id_colonia) {
         this.id_colonia = id_colonia;
     }
 
@@ -465,7 +587,13 @@ class Venta implements Parcelable {
 
     public void setCosto(String costo) { this.costo = costo; }
 
+    public int getAprobado() {
+        return aprobado;
+    }
 
+    public void setAprobado(int aprobado) {
+        this.aprobado = aprobado;
+    }
 }
 
 

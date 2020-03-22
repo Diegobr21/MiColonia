@@ -20,6 +20,13 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--  transitions -->
 
-
     </style>
+
+    <style name="DarkMode" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <item name="colorPrimary">@android:color/darker_gray</item>
+    <item name="colorPrimaryDark">@android:color/background_dark</item>
+    <item name="colorAccent">@android:color/holo_purple</item>
+
+</style>
+
 </resources>

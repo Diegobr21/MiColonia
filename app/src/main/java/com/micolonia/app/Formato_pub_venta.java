@@ -62,7 +62,7 @@ public class Formato_pub_venta extends AppCompatActivity {
             data.put("telefono", contac_negcom);
             data.put("descripcion", desc_negcom);
             // Este campo es importante, hará que no se muestre en la app hasta su aprobación.
-            data.put("visible", 0);
+            data.put("aprobado", 0);
 
             final ProgressDialog dialog = new ProgressDialog(this);
             dialog.setMessage("Cargando");

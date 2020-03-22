@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.micolonia.app">
 
+
     <application
-        android:name="com.micolonia.app.LasHadas"
+        android:name=".LasHadas"
         android:allowBackup="true"
         android:appCategory="social"
         android:banner="@mipmap/ic_launcher_micolonia"
         android:icon="@mipmap/ic_launcher_micolonia"
         android:label="@string/app_name"
         android:logo="@mipmap/ic_launcher_micolonia_round"
-        android:minSdkVersion="16"
-        android:roundIcon="@mipmap/ic_launcher_logohadas_round"
+        android:minSdkVersion="24"
+        android:roundIcon="@mipmap/ic_launcher_micolonia_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeRegister">
-        <activity android:name="com.micolonia.app.Olvido_pssd"></activity>
-        <activity android:name="com.micolonia.app.Ayuda" />
-        <activity android:name="com.micolonia.app.Formato_pub_venta" />
-        <activity android:name="com.micolonia.app.Formato_pub_serv" />
-        <activity android:name="com.micolonia.app.Imagen_venta" />
-        <activity android:name="com.micolonia.app.seleccionar" />
-        <activity android:name="com.micolonia.app.AvisoPrivacidad" />
-        <activity android:name="com.micolonia.app.Formato_pub_comida" />
-        <activity android:name="com.micolonia.app.Contacto" />
-        <activity android:name="com.micolonia.app.Publicar" />
-        <activity android:name="com.micolonia.app.seccion_ventas" />
-        <activity android:name="com.micolonia.app.Servicios" />
-        <activity android:name="com.micolonia.app.seccion_servicios" />
-        <activity android:name="com.micolonia.app.seccion_comida" />
-        <activity android:name="com.micolonia.app.Comida" />
-        <activity android:name="com.micolonia.app.Perfil" />
-        <activity android:name="com.micolonia.app.Inicio">
+        <activity android:name=".Aviso_Admin"></activity>
+        <activity android:name=".Pago_Usu_Admin" />
+        <activity android:name=".Admin" />
+        <activity android:name=".Olvido_pssd" />
+        <activity android:name=".Ayuda" />
+        <activity android:name=".Formato_pub_venta" />
+        <activity android:name=".Formato_pub_serv" />
+        <activity android:name=".Imagen_venta" />
+        <activity android:name=".seleccionar" />
+        <activity android:name=".AvisoPrivacidad" />
+        <activity android:name=".Formato_pub_comida" />
+        <activity android:name=".Contacto" />
+        <activity android:name=".Publicar" />
+        <activity android:name=".seccion_ventas" />
+        <activity android:name=".Servicios" />
+        <activity android:name=".seccion_servicios" />
+        <activity android:name=".seccion_comida" />
+        <activity android:name=".Comida" />
+        <activity android:name=".Perfil" />
+        <activity android:name=".Inicio">
             <intent-filter>
                 <action android:name="com.micomunidad.lashadas.Inicio" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.micolonia.app.InicioSesion">
+        <activity
+            android:name=".InicioSesion"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.micolonia.app.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -69,8 +76,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="Canal_1_ID" />
+
         <service
-            android:name="com.micolonia.app.MyFirebaseMessagingService"
+            android:name=".MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -80,5 +88,6 @@
     </application>
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
 </manifest>

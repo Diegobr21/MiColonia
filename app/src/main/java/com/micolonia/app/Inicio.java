@@ -1,8 +1,11 @@
 package com.micolonia.app;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +63,31 @@ public class Inicio extends AppCompatActivity {
     private String email_current_user;
     public String current_colonia, colonia;
 
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean agreed = sharedPreferences.getBoolean("agreed",false);
+        if (!agreed) {
+            new AlertDialog.Builder(this)
+                    .setTitle("License agreement")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("agreed", true);
+                            editor.commit();
+                        }
+                    })
+                    //.setNegativeButton("No", null)
+                    .setTitle(R.string.avipriv )
+                    .setMessage(R.string.avisodeprivacidad1)
+                    .show();
+        }
+
 
 
         getSupportActionBar().hide();
@@ -88,7 +114,7 @@ public class Inicio extends AppCompatActivity {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
         //initializeData();
         //initializeAdapter();
-        addData();
+        gettingColonia();
         addImages();
 
 
@@ -104,7 +130,7 @@ public class Inicio extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                addData();
+                gettingColonia();
                 addImages();
             }
         });
@@ -155,11 +181,13 @@ public class Inicio extends AppCompatActivity {
 
     }
 
+
     public void verperfil() {
         Intent intentperfil = new Intent(this, Perfil.class);
         intentperfil.putExtra("Remitente","DesdeInicio");
         startActivity(intentperfil);
     }
+
 
     public void verseccioncomida() {
         Intent intentcomida = new Intent(this, seccion_comida.class);
@@ -197,12 +225,10 @@ public class Inicio extends AppCompatActivity {
                         if (documentSnapshot.exists()){
                             Map<String, Object> usu = documentSnapshot.getData();
                             current_colonia = usu.get("colonia").toString().trim();
-                                 //documentSnapshot.getString("colonia");
-                                 //current_colonia=Integer.parseInt(cur_co);
-                            //Toast.makeText(Inicio.this, "Num "+current_colonia, Toast.LENGTH_SHORT).show();
+                                addData(current_colonia);
 
                         }else{
-                            Toast.makeText(Inicio.this,"No existe el id_colonia del usaurio", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Inicio.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -216,7 +242,7 @@ public class Inicio extends AppCompatActivity {
     }
 
 
-    private void addData() {
+    private void addData(String colonia_avisos) {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
         // Usando el objeto Aviso, su estructura es así:
         // {name: "Nombre", logoId: 1}
@@ -231,31 +257,61 @@ public class Inicio extends AppCompatActivity {
         progressDialog.show();
         refreshLayout.setRefreshing(false);
 
-        db.collection("avisos")
-                .whereEqualTo("id_colonia", gettingColonia())
-                // .orderBy("timestamp", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            arrayavisos = new ArrayList<>();
+        if (colonia_avisos.equals("1")){
+            db.collection("avisos_las_hadas")
+                    //.whereEqualTo("id_colonia", colonia_avisos)
+                     .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayavisos = new ArrayList<>();
 
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                Aviso aviso = doc.toObject(Aviso.class);
-                                arrayavisos.add(aviso);
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Aviso aviso = doc.toObject(Aviso.class);
+                                    arrayavisos.add(aviso);
+                                }
+
+                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
+                                recyclerView.setAdapter(adapter);
+                            } else {
+                                Toast.makeText(Inicio.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
                             }
 
-                            RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
-                            recyclerView.setAdapter(adapter);
-                        } else {
-                            Toast.makeText(Inicio.this, "Error", Toast.LENGTH_SHORT).show();
-                            refreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
                         }
+                    });
 
-                        progressDialog.dismiss();
-                    }
-                });
+        }else if(colonia_avisos.equals("2")){
+            db.collection("avisos_mision_anahuac")
+                    //.whereEqualTo("id_colonia", colonia_avisos)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arrayavisos = new ArrayList<>();
+
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    Aviso aviso = doc.toObject(Aviso.class);
+                                    arrayavisos.add(aviso);
+                                }
+
+                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
+                                recyclerView.setAdapter(adapter);
+                            } else {
+                                Toast.makeText(Inicio.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+
     }
 
 
@@ -437,3 +493,4 @@ class Aviso {
         this.timestamp = timestamp;
     }
 }
+

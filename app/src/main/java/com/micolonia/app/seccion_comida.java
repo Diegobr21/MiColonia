@@ -7,8 +7,13 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -34,6 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class seccion_comida extends AppCompatActivity implements RecyclerViewAdapter_comida.OnNegocioListener {
     private AdapterViewFlipper flip_comida;
@@ -45,14 +51,11 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
     Context context;
     private List<NegocioCom> arraycomida;
     private List<Imagen> arrayimagenes;
+    public String current_colonia;
 
-   /* int[] imagflipper_com = {
-            R.drawable.food,
-            R.drawable.wreck,
-            R.drawable.foco
-    };
-*/
+    private DocumentReference usuRef;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,9 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         getSupportActionBar().hide();
 
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        usuRef=db.collection("usuarios").document(user.getUid());
 
         refreshLayout=findViewById(R.id.refresh_layout_com);
         recyclerView_com = (RecyclerView) findViewById(R.id.recyclerView_comida);
@@ -67,9 +73,8 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView_com.setLayoutManager(layoutManager);
         RecyclerViewAdapter_comida adapter_comida = new RecyclerViewAdapter_comida(arraycomida, this);
-        //initializeData();
-        //initializeAdapter();
-        addData();
+
+        gettingColonia();
         addImages();
 
         publicar = findViewById(R.id.floatingpublicar);
@@ -82,7 +87,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                addData();
+                gettingColonia();
                 addImages();
             }
         });
@@ -141,7 +146,32 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
      * TODO: Add data
      */
 
-    private void addData() {
+    public String gettingColonia(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+                            addData(current_colonia);
+
+                        }else{
+                            Toast.makeText(seccion_comida.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(seccion_comida.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+
+    private void addData(String colonia) {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
         // Usando el objeto Aviso, su estructura es así:
         // {name: "Nombre", logoId: 1}
@@ -152,36 +182,71 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         progressDialog.setMessage("Cargando");
         progressDialog.show();
         refreshLayout.setRefreshing(false);
+        if(colonia.equals("1")){
+            db.collection("comida_las_hadas")
+                    //.whereEqualTo("id_colonia", colonia)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    //.whereEqualTo("visible", 1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arraycomida = new ArrayList<>();
 
-        db.collection("comida")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                //.whereEqualTo("visible", 1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            arraycomida = new ArrayList<>();
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    NegocioCom negocioCom = doc.toObject(NegocioCom.class);
+                                    arraycomida.add(negocioCom);
+                                }
 
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                NegocioCom negocioCom = doc.toObject(NegocioCom.class);
-                                arraycomida.add(negocioCom);
+                                RecyclerViewAdapter_comida adapter_comida =
+                                        new RecyclerViewAdapter_comida(
+                                                arraycomida,
+                                                seccion_comida.this
+                                        );
+                                recyclerView_com.setAdapter(adapter_comida);
+                            } else {
+                                Toast.makeText(seccion_comida.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
                             }
 
-                            RecyclerViewAdapter_comida adapter_comida =
-                                    new RecyclerViewAdapter_comida(
-                                            arraycomida,
-                                            seccion_comida.this
-                                    );
-                            recyclerView_com.setAdapter(adapter_comida);
-                        } else {
-                            Toast.makeText(seccion_comida.this, "Error", Toast.LENGTH_SHORT).show();
-                            refreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
                         }
+                    });
+        }else if(colonia.equals("2")){
+            db.collection("comida_mision_anahuac")
+                    //.whereEqualTo("id_colonia", colonia)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    //.whereEqualTo("visible", 1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                arraycomida = new ArrayList<>();
 
-                        progressDialog.dismiss();
-                    }
-                });
+                                for (DocumentSnapshot doc : task.getResult()) {
+                                    NegocioCom negocioCom = doc.toObject(NegocioCom.class);
+                                    arraycomida.add(negocioCom);
+                                }
+
+                                RecyclerViewAdapter_comida adapter_comida =
+                                        new RecyclerViewAdapter_comida(
+                                                arraycomida,
+                                                seccion_comida.this
+                                        );
+                                recyclerView_com.setAdapter(adapter_comida);
+                            } else {
+                                Toast.makeText(seccion_comida.this, "Error", Toast.LENGTH_SHORT).show();
+                                refreshLayout.setRefreshing(false);
+                            }
+
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+
+
     }
 
     public void addImages(){
@@ -302,7 +367,7 @@ class NegocioCom implements Parcelable {
 
     String name;
     int logoId;
-    int id_colonia;
+    String id_colonia;
     String imagen;
     String telefono;
     String descripcion;
@@ -327,7 +392,7 @@ class NegocioCom implements Parcelable {
         name = in.readString();
         logoId = in.readInt();
         imagen = in.readString();
-        id_colonia = in.readInt();
+        id_colonia = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
         horario = in.readString();
@@ -345,7 +410,7 @@ class NegocioCom implements Parcelable {
         dest.writeString(name);
         dest.writeInt(logoId);
         dest.writeString(imagen);
-        dest.writeInt(id_colonia);
+        dest.writeString(id_colonia);
         dest.writeString(telefono);
         dest.writeString(descripcion);
         dest.writeString(horario);
@@ -398,11 +463,11 @@ class NegocioCom implements Parcelable {
         this.imagen = imagen;
     }
 
-    public int getId_colonia() {
+    public String getId_colonia() {
         return id_colonia;
     }
 
-    public void setId_colonia(int id_colonia) {
+    public void setId_colonia(String id_colonia) {
         this.id_colonia = id_colonia;
     }
 
