@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.micolonia.app">
 
-
     <application
         android:name=".LasHadas"
         android:allowBackup="true"
@@ -16,7 +15,11 @@
         android:roundIcon="@mipmap/ic_launcher_micolonia_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeRegister">
-        <activity android:name=".Aviso_Admin"></activity>
+        <activity android:name=".GeneradorQR"></activity>
+        <activity
+            android:name=".LectorQR"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Aviso_Admin" />
         <activity android:name=".Pago_Usu_Admin" />
         <activity android:name=".Admin" />
         <activity android:name=".Olvido_pssd" />
@@ -88,6 +91,5 @@
     </application>
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
 
 </manifest>

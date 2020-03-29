@@ -45,9 +45,10 @@ private TextView usercolonia;
     private DocumentReference usuRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    public String current_colonia, colonia_a;
     //private Map<String, Object> current_admin;
     private List<Usuario> arrayusuarios;
-    public String current_colonia, colonia_a;
+
     Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

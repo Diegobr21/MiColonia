@@ -116,7 +116,7 @@
 
 
         <Button
-            android:id="@+id/generar_qr"
+            android:id="@+id/lector_qr"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -124,7 +124,9 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/botoncircular"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:text="Generar QR"
+            android:drawableLeft="@drawable/ic_security_black_24dp"
+            android:padding="8dp"
+            android:text="Lector QR"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/btn_admin"
@@ -147,7 +149,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_contacto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/generar_qr" />
+            app:layout_constraintTop_toBottomOf="@+id/lector_qr" />
 
         <Button
             android:id="@+id/btn_contacto"
@@ -198,14 +200,21 @@
             app:layout_constraintStart_toStartOf="parent" />
 
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:baselineAlignBottom="true"
+        android:overScrollMode="ifContentScrolls"
+        android:padding="2dp"
+        android:backgroundTint="@color/colorPrimary2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/qricon" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

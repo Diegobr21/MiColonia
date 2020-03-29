@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,9 +26,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class Perfil extends AppCompatActivity {
-    private Button cerrarsesion, ayuda, contacto, publicar, avisopriv, generar_qr;
+    private Button cerrarsesion, ayuda, contacto, publicar, avisopriv, leer_qr;
     private TextView title;
     private ImageButton back, admin;
+    private FloatingActionButton generar_qr;
     private DocumentReference usuRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -50,7 +52,8 @@ public class Perfil extends AppCompatActivity {
         back= findViewById(R.id.imgbtn_back);
         admin=findViewById(R.id.btn_admin);
 
-        generar_qr = findViewById(R.id.generar_qr);
+        generar_qr = findViewById(R.id.floating_qr);
+        leer_qr = findViewById(R.id.lector_qr);
         ayuda = (Button) findViewById(R.id.btn_ayuda);
         cerrarsesion = (Button) findViewById(R.id.btn_cerrarsesion);
         publicar = (Button) findViewById(R.id.btn_a_publicar);
@@ -123,6 +126,20 @@ public class Perfil extends AppCompatActivity {
             public void onClick(View v) {
 
                 avisoprivacidad();
+            }
+        });
+
+        leer_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrir_escaner();
+            }
+        });
+
+        generar_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generador_qr();
             }
         });
     }
@@ -222,6 +239,17 @@ public class Perfil extends AppCompatActivity {
         startActivity(intent5);
     }
 
+    private void abrir_escaner(){
+        Intent intent6 = new Intent(this, LectorQR.class);
+
+        startActivity(intent6);
+    }
+
+    private void generador_qr(){
+        Intent intent7 = new Intent(this, GeneradorQR.class);
+
+        startActivity(intent7);
+    }
     private void dialogoalerta() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
