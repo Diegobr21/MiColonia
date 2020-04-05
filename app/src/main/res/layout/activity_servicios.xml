@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bckgnd1"
     tools:context=".InicioSesion">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -104,6 +105,7 @@
         android:layout_marginEnd="30dp"
         android:autoLink="web"
         android:clickable="true"
+        android:textAlignment="center"
         android:focusable="true"
         android:textColor="@android:color/black"
         android:textSize="17sp" />

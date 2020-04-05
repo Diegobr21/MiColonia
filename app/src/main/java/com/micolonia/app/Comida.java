@@ -1,6 +1,7 @@
 package com.micolonia.app;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -9,16 +10,28 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class Comida extends AppCompatActivity {
     public static final int REQUEST_CALL = 1;
@@ -30,10 +43,16 @@ public class Comida extends AppCompatActivity {
     private ImageView img_tel;
     private ImageView wha;
     private ImageView back;
+    private ImageButton delete;
     //  protected ArrayList<String> platillos= new ArrayList<String>();
     //  protected ArrayList<String> descripciones= new ArrayList<String>();
     //  protected ArrayList<Integer> precios= new ArrayList<Integer>();
-    private double ratings[] = new double[6];
+    //private double ratings[] = new double[6];
+    private DocumentReference usuRef;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    // private String email_current_user;
+    public String current_tipo, postId, current_colonia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +60,13 @@ public class Comida extends AppCompatActivity {
         setContentView(R.layout.activity_comida);
         getSupportActionBar().hide();
 
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        //email_current_user=user.getEmail();
+        usuRef=db.collection("usuarios").document(user.getUid());
+
+        delete = findViewById(R.id.delete_comida);
         back=findViewById(R.id.backbtncom);
         descgeneral = findViewById(R.id.desc_negcom);
         Nom_negocio = findViewById(R.id.titulo_comida);
@@ -50,6 +76,9 @@ public class Comida extends AppCompatActivity {
         img_tel= findViewById(R.id.img_tel);
         wha=findViewById(R.id.wha);
         NegocioCom comida = getIntent().getParcelableExtra("comida");
+        postId = comida.getId();
+
+
 
         Nom_negocio.setText(comida.getName());
 
@@ -61,15 +90,12 @@ public class Comida extends AppCompatActivity {
 
         horarios.setText("Horario Activo: "+comida.getHorario());
         descgeneral.setText(comida.getDescripcion());
-
-
         img_tel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 llamada();
             }
         });
-
         wha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +115,16 @@ public class Comida extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 backcom();
+            }
+        });
+
+        //Delete
+        delete.setVisibility(View.GONE);
+        gettingTipo();
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gettingColonia();
             }
         });
 
@@ -135,6 +171,103 @@ public class Comida extends AppCompatActivity {
         fragment.setArguments(args);
         // Finalmente carga el fragmento
         loadFragment(fragment);
+    }
+
+    public String gettingColonia(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            deletePost(current_colonia);
+
+
+                        }else{
+                            Toast.makeText(Comida.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Comida.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+
+    public String gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                delete.setVisibility(View.VISIBLE);
+                            }
+
+                        }else{
+                            Toast.makeText(Comida.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Comida.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_tipo;
+    }
+
+    private void regresarComida(){
+        Intent intentc = new Intent(this, seccion_comida.class);
+        startActivity(intentc);
+        finish();
+    }
+    private void deletePost(final String colonia){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Eliminar publicación");
+        builder.setMessage("¿Estas seguro de eliminar esta publicación?");
+        //listeners de los botones
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final ProgressDialog progressDialog = new ProgressDialog(Comida.this);
+                progressDialog.setMessage("Cargando");
+                progressDialog.show();
+
+
+                if (colonia.equals("1")){
+                    db.collection("comida_las_hadas").document(postId).delete();
+                    progressDialog.dismiss();
+                    regresarComida();
+
+                }else if(colonia.equals("2")){
+                    db.collection("comida_mision_anahuac").document(postId).delete();
+                    progressDialog.dismiss();
+                    regresarComida();
+
+                }
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     private void backcom(){

@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bckgnd1"
     tools:context=".Imagen_venta">
 
     <com.google.android.material.appbar.AppBarLayout

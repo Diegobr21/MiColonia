@@ -1,100 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_width= "match_parent"
+    android:layout_height= "match_parent"
+    android:background="@drawable/bckgnd1"
     tools:context=".Formato_pub_comida">
-    <ImageView
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="130dp"
-        android:src="@drawable/micolonialogo1"
-        android:layout_width="130dp"
-        android:layout_height="100dp" />
-    <EditText
-        android:focusable="true"
-        android:nextFocusDown="@id/contac_formato"
-        android:id="@+id/Titulo"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="30dp"
 
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:hint="Titulo de Publicación"
-        android:maxLength="25"/>
+    <com.google.android.material.appbar.AppBarLayout
 
-    <EditText
-        android:focusable="true"
-        android:nextFocusDown="@id/desc_formato"
-        android:id="@+id/contac_formato"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Contacto ej: Celular o Telefono"/>
-    <EditText
-        android:focusable="true"
-        android:nextFocusDown="@id/precio_formato"
-        android:id="@+id/desc_formato"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Descripcion General"/>
-
-    <EditText
-        android:id="@+id/precio_formato"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="$ Precio "/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppThemeRegister">
 
-        <Button
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:onClick="ToastGuardar"
-            android:text="Guardar"
-            android:textColor="@color/amarillo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
 
-        <Button
-            android:id="@+id/btn_1"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="Regresar a Inicio"
-            android:textColor="@color/amarillo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button3" />
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/casa_yellow"
+                    android:tint="@android:color/holo_orange_light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Aviso de Ocasión"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
 
-</LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="vertical"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingRight="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="1dp"
+            android:layout_marginTop="50dp"
+            >
+
+
+            <EditText
+                android:id="@+id/Titulo"
+                android:layout_width="330dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:hint="Título del Aviso"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="25"
+                android:nextFocusDown="@id/desc_formato_venta"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/desc_formato_venta"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Descripción del Aviso de Ocasión"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/contac_negcom"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Titulo"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/contac_formato_venta"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Contacto ej: Celular o Telefono"
+                android:importantForAutofill="no"
+                android:inputType="text|phone"
+                android:nextFocusDown="@id/desc_negcom"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/desc_formato_venta"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/precio_formato_venta"
+                android:layout_width="330dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:hint="$ Precio "
+                android:importantForAutofill="no"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contac_formato_venta"
+                tools:targetApi="o" />
+
+            <ImageButton
+                android:id="@+id/imgbtn_add_pic_venta"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:src="@drawable/ic_add_a_photo_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/precio_formato_venta"></ImageButton>
+
+            <ImageView
+                android:id="@+id/img_add_venta"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgbtn_add_pic_venta"
+                app:layout_constraintTop_toBottomOf="@+id/precio_formato_venta"></ImageView>
+
+
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_add_venta">
+
+                <RadioButton
+                    android:id="@+id/rdbtn_otro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Venta"
+                    android:onClick="checkRadioBtn"></RadioButton>
+
+                <RadioButton
+                    android:id="@+id/rdbtn_bienes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bienes Raices"
+                    android:onClick="checkRadioBtn"></RadioButton>
+
+
+            </RadioGroup>
+            <Button
+
+                android:id="@+id/btn_formato_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Guardar"
+                android:textColor="@color/amarillo"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
+
+            <Button
+                android:id="@+id/btn_3_v"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Regresar a Inicio"
+                android:textColor="@color/amarillo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_formato_venta" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

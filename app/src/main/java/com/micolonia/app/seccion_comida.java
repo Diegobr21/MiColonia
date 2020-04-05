@@ -196,6 +196,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     NegocioCom negocioCom = doc.toObject(NegocioCom.class);
+                                    negocioCom.id= doc.getId();
                                     arraycomida.add(negocioCom);
                                 }
 
@@ -227,6 +228,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     NegocioCom negocioCom = doc.toObject(NegocioCom.class);
+                                    negocioCom.id= doc.getId();
                                     arraycomida.add(negocioCom);
                                 }
 
@@ -367,6 +369,7 @@ class NegocioCom implements Parcelable {
 
     String name;
     int logoId;
+    String id;
     String id_colonia;
     String imagen;
     String telefono;
@@ -392,6 +395,7 @@ class NegocioCom implements Parcelable {
         name = in.readString();
         logoId = in.readInt();
         imagen = in.readString();
+        id = in.readString();
         id_colonia = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
@@ -410,6 +414,7 @@ class NegocioCom implements Parcelable {
         dest.writeString(name);
         dest.writeInt(logoId);
         dest.writeString(imagen);
+        dest.writeString(id);
         dest.writeString(id_colonia);
         dest.writeString(telefono);
         dest.writeString(descripcion);
@@ -485,6 +490,14 @@ class NegocioCom implements Parcelable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getHorario() {

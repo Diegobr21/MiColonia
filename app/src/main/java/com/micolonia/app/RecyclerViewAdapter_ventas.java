@@ -68,7 +68,7 @@ class RecyclerViewAdapter_ventas extends RecyclerView.Adapter<RecyclerViewAdapte
                     .load(arrayventas.get(position).getImagen())
                     .into(holder.Logo);
 
-        }else if( arrayventas.get(position).getTipo()==2){
+        }else if( arrayventas.get(position).getTipo()=="2"){
 
             holder.Logo.setImageResource(R.drawable.casa);
             }

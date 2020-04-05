@@ -48,7 +48,7 @@ public class Imagen_venta extends AppCompatActivity {
 
         titulo.setText(venta.getName());
         descgeneral.setText(venta.getDescripcion());
-        costo.setText("$ "+venta.getCosto());
+        costo.setText("$ " + venta.getCosto());
         contacto.setText(": "+venta.getTelefono());
 
         wha.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +84,7 @@ public class Imagen_venta extends AppCompatActivity {
         if(venta.getImagen()!=null){
         Glide.with(this).load(venta.getImagen()).into(imagenventa);
         }
-        else if(venta.getTipo()==2){
+        else if(venta.getTipo()=="2"){
             imagenventa.setImageResource(R.drawable.casa);
         }else{
             imagenventa.setImageResource(R.drawable.logonegropng);

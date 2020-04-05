@@ -294,7 +294,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
             db.collection("ventas_las_hadas")
                     //.orderBy("idType")
                     //.orderBy("timestamp")
-                    .whereEqualTo("idType", 2)
+                    .whereEqualTo("idType", "2")
                     //.startAt(2)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -325,7 +325,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
             db.collection("ventas_mision_anahuac")
                     //.orderBy("idType")
                     .orderBy("timestamp")
-                    .whereGreaterThan("idType", 1)
+                    .whereEqualTo("idType", "2")
                     //.startAt(2)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -481,7 +481,7 @@ class Venta implements Parcelable {
     String descripcion;
     String costo;
    // String titulo;
-    int tipo;
+    String tipo;
     String telefono;
     int aprobado;
 
@@ -495,13 +495,13 @@ class Venta implements Parcelable {
 
     protected Venta(Parcel in) {
         name = in.readString();
-        logoId = in.readInt();
-        id_colonia = in.readString();
-        tipo = in.readInt();
-        imagen = in.readString();
-        telefono = in.readString();
         descripcion = in.readString();
         costo = in.readString();
+        telefono = in.readString();
+        imagen = in.readString();
+        logoId = in.readInt();
+        id_colonia = in.readString();
+        tipo = in.readString();
         aprobado = in.readInt();
       //  titulo = in.readString();
 
@@ -512,13 +512,13 @@ class Venta implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(name);
-        dest.writeInt(logoId);
-        dest.writeString(id_colonia);
-        dest.writeInt(tipo);
-        dest.writeString(imagen);
-        dest.writeString(telefono);
         dest.writeString(descripcion);
         dest.writeString(costo);
+        dest.writeString(telefono);
+        dest.writeString(imagen);
+        dest.writeInt(logoId);
+        dest.writeString(id_colonia);
+        dest.writeString(tipo);
         dest.writeInt(aprobado);
        // dest.writeString(titulo);
 
@@ -575,9 +575,13 @@ class Venta implements Parcelable {
 
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public int getTipo() { return tipo; }
+    public String getTipo() {
+        return tipo;
+    }
 
-    public void setTipo(int tipo) { this.tipo = tipo; }
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public String getTelefono() { return telefono; }
 

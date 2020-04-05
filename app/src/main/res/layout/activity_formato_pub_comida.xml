@@ -1,114 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_width= "match_parent"
+    android:layout_height= "match_parent"
+    android:background="@drawable/bckgnd1"
     tools:context=".Formato_pub_comida">
 
-    <ImageView
-        android:layout_width="130dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/micolonialogo1" />
+    <com.google.android.material.appbar.AppBarLayout
 
-    <EditText
-        android:id="@+id/nombre_negcom"
-        android:layout_width="330dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:hint="Nombre del negocio"
-        android:inputType="text"
-        android:maxLength="25"
-        android:nextFocusDown="@id/horarios_negcom"
-        android:textAlignment="center"
-        android:importantForAutofill="no" tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/horarios_negcom"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:hint="Horarios Activos ej: Lun-Vie 11am-8pm"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:nextFocusDown="@id/contac_negcom"
-        android:textAlignment="center"
-        tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/contac_negcom"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:hint="Contacto ej: Celular o Telefono"
-        android:importantForAutofill="no"
-        android:inputType="text|phone"
-        android:nextFocusDown="@id/desc_negcom"
-        android:textAlignment="center"
-        tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/desc_negcom"
-        android:layout_width="330dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:hint="Descripcion General del negocio"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        tools:targetApi="o" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppThemeRegister">
 
-        <Button
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:onClick="ToastGuardar"
-            android:text="Guardar"
-            android:textColor="@color/amarillo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
 
-        <Button
-            android:id="@+id/btn_3"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="Regresar a Inicio"
-            android:textColor="@color/amarillo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/casa_yellow"
+                    android:tint="@android:color/holo_orange_light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Negocio Comida"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
 
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="vertical"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingRight="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="1dp"
+            android:layout_marginTop="50dp"
+            >
+
+
+            <EditText
+                android:id="@+id/nombre_negcom"
+                android:layout_width="330dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:hint="Nombre del negocio"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="25"
+                android:nextFocusDown="@id/horarios_negcom"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/horarios_negcom"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Horarios Activos ej: Lun-Vie 11am-8pm"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/contac_negcom"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nombre_negcom"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/contac_negcom"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Contacto ej: Celular o Telefono"
+                android:importantForAutofill="no"
+                android:inputType="text|phone"
+                android:nextFocusDown="@id/desc_negcom"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horarios_negcom"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/desc_negcom"
+                android:layout_width="330dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:hint="Descripcion General del negocio"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contac_negcom"
+                tools:targetApi="o" />
+
+            <ImageButton
+                android:id="@+id/imgbtn_add_pic_comida"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:src="@drawable/ic_add_a_photo_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/desc_negcom"></ImageButton>
+
+            <ImageView
+                android:id="@+id/img_add_comida"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgbtn_add_pic_comida"
+                app:layout_constraintTop_toBottomOf="@+id/desc_negcom"></ImageView>
+
+            <ImageView
+                android:id="@+id/img_menu"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/mm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_add_comida"></ImageView>
+
+            <EditText
+                android:id="@+id/platillo1"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:hint="1er Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/platillo2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_menu"></EditText>
+
+            <EditText
+                android:id="@+id/platillo2"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="2do Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/platillo3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo1"></EditText>
+
+            <EditText
+                android:id="@+id/platillo3"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="3er Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/platillo4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo2"></EditText>
+            <EditText
+                android:id="@+id/platillo4"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="4to Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/platillo5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo3"></EditText>
+            <EditText
+                android:id="@+id/platillo5"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="5to Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:nextFocusDown="@id/platillo6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo4"></EditText>
+            <EditText
+                android:id="@+id/platillo6"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="6to Platillo y Costo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo5"></EditText>
+
+
+            <Button
+
+                android:id="@+id/btn_formato_comida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Guardar"
+                android:textColor="@color/amarillo"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/platillo6" />
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Regresar a Inicio"
+                android:textColor="@color/amarillo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_formato_comida" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
