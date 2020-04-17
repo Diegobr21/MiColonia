@@ -81,7 +81,7 @@ public class InicioSesion extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
-        if (user != null) {
+        if (user != null && user.isEmailVerified()) {
             user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -111,8 +111,14 @@ public class InicioSesion extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
 
                         FirebaseUser user = mAuth.getCurrentUser();
+                        if (user.isEmailVerified()){
+                            iniciodesesion();
+                        }else{
+                            Toast.makeText(InicioSesion.this, "Por favor verifica tu correo", Toast.LENGTH_LONG).show();
+                        }
                         // user.getDisplayName();
-                        iniciodesesion();
+
+
 
 
                     } else {

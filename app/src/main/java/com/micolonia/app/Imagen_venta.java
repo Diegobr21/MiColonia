@@ -1,21 +1,34 @@
 package com.micolonia.app;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class Imagen_venta extends AppCompatActivity {
     public static final int REQUEST_CALL = 1;
@@ -27,6 +40,14 @@ public class Imagen_venta extends AppCompatActivity {
     private ImageView imagenventa;
     private ImageView wha;
     private ImageView back;
+    private ImageButton delete;
+
+    //Firebase
+    private DocumentReference usuRef;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    public String current_tipo, postId, current_colonia;
+
     Venta venta;
 
     @Override
@@ -35,7 +56,14 @@ public class Imagen_venta extends AppCompatActivity {
         setContentView(R.layout.activity_imagen_venta);
         getSupportActionBar().hide();
 
-       back=findViewById(R.id.backbtnven);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        //email_current_user=user.getEmail();
+        usuRef=db.collection("usuarios").document(user.getUid());
+
+        delete = findViewById(R.id.delete_venta);
+        back=findViewById(R.id.backbtnven);
         img_tel=findViewById(R.id.img_tel);
         wha= findViewById(R.id.wha);
         costo=findViewById(R.id.costo_venta);
@@ -47,9 +75,22 @@ public class Imagen_venta extends AppCompatActivity {
         Venta venta = getIntent().getParcelableExtra("venta");
 
         titulo.setText(venta.getName());
+        postId = venta.getId();
         descgeneral.setText(venta.getDescripcion());
         costo.setText("$ " + venta.getCosto());
         contacto.setText(": "+venta.getTelefono());
+
+        //Delete
+        delete.setVisibility(View.GONE);
+        gettingTipo();
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gettingColonia();
+            }
+        });
+
+       // Toast.makeText(this, venta.getId(), Toast.LENGTH_SHORT).show();
 
         wha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +133,103 @@ public class Imagen_venta extends AppCompatActivity {
 
     }
 
+    public String gettingColonia(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_colonia = usu.get("colonia").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            deletePost(current_colonia);
+
+
+                        }else{
+                            Toast.makeText(Imagen_venta.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Imagen_venta.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_colonia;
+    }
+
+    public String gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                delete.setVisibility(View.VISIBLE);
+                            }
+
+                        }else{
+                            Toast.makeText(Imagen_venta.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Imagen_venta.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return current_tipo;
+    }
+
+    private void deletePost(final String colonia){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Eliminar publicación");
+        builder.setMessage("¿Estas seguro de eliminar esta publicación?");
+        //listeners de los botones
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final ProgressDialog progressDialog = new ProgressDialog(Imagen_venta.this);
+                progressDialog.setMessage("Cargando");
+                progressDialog.show();
+
+
+                if (colonia.equals("1")){
+                    db.collection("ventas_las_hadas").document(postId).delete();
+                    progressDialog.dismiss();
+                    backven();
+
+                }else if(colonia.equals("2")){
+                    db.collection("ventas_mision_anahuac").document(postId).delete();
+                    progressDialog.dismiss();
+                    backven();
+
+                }
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+
     private void backven(){
         Intent intentb = new Intent(this, seccion_ventas.class);
         startActivity(intentb);
+        finish();
     }
 
     public void whatsapp(View view){

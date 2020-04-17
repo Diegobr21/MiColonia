@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_micolonia_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeRegister">
-        <activity android:name=".GeneradorQR"></activity>
+        <activity android:name=".Eliminar_Aviso"></activity>
+        <activity android:name=".GeneradorQR" />
         <activity
             android:name=".LectorQR"
             android:screenOrientation="portrait" />

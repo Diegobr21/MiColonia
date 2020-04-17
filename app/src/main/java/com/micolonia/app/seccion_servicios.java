@@ -196,6 +196,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     NegocioSer negocioSer = doc.toObject(NegocioSer.class);
+                                    negocioSer.id = doc.getId();
                                     arrayservicios.add(negocioSer);
                                 }
 
@@ -225,6 +226,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     NegocioSer negocioSer = doc.toObject(NegocioSer.class);
+                                    negocioSer.id = doc.getId();
                                     arrayservicios.add(negocioSer);
                                 }
 
@@ -359,6 +361,7 @@ class NegocioSer implements Parcelable {
 
     String name;
     int logoId;
+    String id;
     String id_colonia;
     String imagen;
     String telefono;
@@ -381,8 +384,9 @@ class NegocioSer implements Parcelable {
     protected NegocioSer(Parcel in) {
         name = in.readString();
         logoId = in.readInt();
-        id_colonia = in.readString();
         imagen = in.readString();
+        id = in.readString();
+        id_colonia = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
         horario = in.readString();
@@ -400,8 +404,9 @@ class NegocioSer implements Parcelable {
 
         dest.writeString(name);
         dest.writeInt(logoId);
-        dest.writeString(id_colonia);
         dest.writeString(imagen);
+        dest.writeString(id);
+        dest.writeString(id_colonia);
         dest.writeString(telefono);
         dest.writeString(descripcion);
         dest.writeString(horario);
@@ -444,6 +449,14 @@ class NegocioSer implements Parcelable {
 
     public void setLogoId(int logoId) {
         this.logoId = logoId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId_colonia() {

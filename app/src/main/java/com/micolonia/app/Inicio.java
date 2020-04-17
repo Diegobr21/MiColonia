@@ -25,6 +25,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Inicio extends AppCompatActivity {
+public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnAvisoListener{
     private AdapterViewFlipper flip_inicio;
    //public ImageButton comida, servicio, ventas;
     public Button  comida, servicio, ventas;
@@ -111,7 +113,7 @@ public class Inicio extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos, this);
         //initializeData();
         //initializeAdapter();
         gettingColonia();
@@ -270,10 +272,11 @@ public class Inicio extends AppCompatActivity {
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Aviso aviso = doc.toObject(Aviso.class);
+                                    aviso.id = doc.getId();
                                     arrayavisos.add(aviso);
                                 }
 
-                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
+                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos, Inicio.this);
                                 recyclerView.setAdapter(adapter);
                             } else {
                                 Toast.makeText(Inicio.this, "Error", Toast.LENGTH_SHORT).show();
@@ -297,10 +300,11 @@ public class Inicio extends AppCompatActivity {
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Aviso aviso = doc.toObject(Aviso.class);
+                                    aviso.id = doc.getId();
                                     arrayavisos.add(aviso);
                                 }
 
-                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos);
+                                RecyclerViewAdapter adapter = new RecyclerViewAdapter(arrayavisos, Inicio.this);
                                 recyclerView.setAdapter(adapter);
                             } else {
                                 Toast.makeText(Inicio.this, "Error", Toast.LENGTH_SHORT).show();
@@ -365,10 +369,19 @@ public class Inicio extends AppCompatActivity {
         }
     }
 
-
-
-
+    @Override
+    public void onAvisoClick(int position, Aviso aviso) {
+        arrayavisos.get(position);
+        //checar y mandar al negocio correspondiente
+        Intent ver_avisointent = new Intent(this, Eliminar_Aviso.class);
+        ver_avisointent.putExtra("aviso", aviso);
+        startActivity(ver_avisointent);
+    }
 }
+
+
+
+
 
 
 //CLASE PARA EL FLIPPER-------------------------------------------------------------
@@ -417,11 +430,12 @@ class CustomAdapter extends BaseAdapter {
 
     } }
 
-class Aviso {
+class Aviso implements Parcelable {
 
     public static final int LOGO_ID_TYPE_WRECK = 1;
     public static final int LOGO_ID_TYPE_FOOD = 2;
 
+    String id;
     String name;
     int logoId;
     String imagen;
@@ -455,6 +469,14 @@ class Aviso {
 
     public void setLogoId(int logoId) {
         this.logoId = logoId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImagen() {
@@ -491,6 +513,47 @@ class Aviso {
 
     public void setTimestamp(double timestamp) {
         this.timestamp = timestamp;
+    }
+
+    protected Aviso(Parcel in) {
+        name = in.readString();
+        imagen = in.readString();
+        id = in.readString();
+        id_colonia = in.readString();
+        fecha = in.readString();
+        logoId = in.readInt();
+        tipo = in.readInt();
+
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    public static final Creator<Aviso> CREATOR = new Creator<Aviso>() {
+        @Override
+        public Aviso createFromParcel(Parcel in) {
+            return new Aviso(in);
+        }
+
+        @Override
+        public Aviso[] newArray(int size) {
+            return new Aviso[size];
+        }
+    };
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(imagen);
+        dest.writeString(id);
+        dest.writeString(id_colonia);
+        dest.writeString(fecha);
+        dest.writeInt(logoId);
+        dest.writeInt(tipo);
+
+
+
     }
 }
 

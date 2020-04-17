@@ -201,7 +201,7 @@ public class Formato_pub_comida extends AppCompatActivity {
 
 
                                     Toast.makeText(Formato_pub_comida.this,
-                                            "Su publicación fue enviada para ser revisada",
+                                            "Su publicación fue exitosa",
                                             Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(Formato_pub_comida.this,

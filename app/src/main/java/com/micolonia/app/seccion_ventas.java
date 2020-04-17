@@ -231,6 +231,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Venta venta = doc.toObject(Venta.class);
+                                    venta.id = doc.getId();
                                     arrayventas.add(venta);
                                 }
 
@@ -262,6 +263,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Venta venta = doc.toObject(Venta.class);
+                                    venta.id = doc.getId();
                                     arrayventas.add(venta);
                                 }
 
@@ -306,6 +308,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Venta venta = doc.toObject(Venta.class);
+                                    venta.id = doc.getId();
                                     arrayventas.add(venta);
                                 }
 
@@ -337,6 +340,7 @@ public class seccion_ventas extends AppCompatActivity implements RecyclerViewAda
 
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Venta venta = doc.toObject(Venta.class);
+                                    venta.id = doc.getId();
                                     arrayventas.add(venta);
                                 }
 
@@ -475,15 +479,16 @@ class Venta implements Parcelable {
     public static final int LOGO_ID_TYPE_FOOD = 2;
 
     String name;
-    int logoId;
-    String id_colonia;
-    String imagen;
+    String id;
     String descripcion;
     String costo;
-   // String titulo;
-    String tipo;
     String telefono;
+    String imagen;
+    String id_colonia;
+    // String titulo;
+    String tipo;
     int aprobado;
+    int logoId;
 
     Venta(String name, int logoId) {
         this.name = name;
@@ -495,6 +500,7 @@ class Venta implements Parcelable {
 
     protected Venta(Parcel in) {
         name = in.readString();
+        id = in.readString();
         descripcion = in.readString();
         costo = in.readString();
         telefono = in.readString();
@@ -512,6 +518,7 @@ class Venta implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(name);
+        dest.writeString(id);
         dest.writeString(descripcion);
         dest.writeString(costo);
         dest.writeString(telefono);
@@ -561,6 +568,14 @@ class Venta implements Parcelable {
 
     public void setId_colonia(String id_colonia) {
         this.id_colonia = id_colonia;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImagen() {

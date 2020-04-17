@@ -82,10 +82,11 @@ public class Comida extends AppCompatActivity {
 
         Nom_negocio.setText(comida.getName());
 
-        if(comida.getImagen()!=null){
-            Glide.with(this).load(comida.getImagen()).circleCrop().into(imagencom);
+        if(comida.getImagen().isEmpty()){
+            imagencom.setImageResource(R.drawable.foodsign);
+
         }else{
-            imagencom.setImageResource(R.drawable.food);
+            Glide.with(this).load(comida.getImagen()).circleCrop().into(imagencom);
         }
 
         horarios.setText("Horario Activo: "+comida.getHorario());
@@ -128,7 +129,7 @@ public class Comida extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(this, comida.getName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, comida.getName(), Toast.LENGTH_SHORT).show();
 
       /*  FragmentoNegCom fragmentoNegCom = new FragmentoNegCom();
         Bundle args = new Bundle();

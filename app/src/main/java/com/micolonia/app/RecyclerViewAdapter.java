@@ -17,30 +17,39 @@ import java.util.List;
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.AvisosViewHolder> {
     private final List<Aviso> arrayavisos;
+    private OnAvisoListener mOnAvisoListener;
 
-    RecyclerViewAdapter(List<Aviso> arrayavisos) {
+    RecyclerViewAdapter(List<Aviso> arrayavisos, OnAvisoListener onAvisoListener) {
         this.arrayavisos = arrayavisos;
+        this.mOnAvisoListener = onAvisoListener;
     }
 
-    public class AvisosViewHolder extends RecyclerView.ViewHolder {
+    public class AvisosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
         TextView titulo_aviso;
         ImageView Logo;
         TextView fecha;
+        OnAvisoListener onAvisoListener;
 
-        AvisosViewHolder(View itemView) {
+        AvisosViewHolder(View itemView, OnAvisoListener onAvisoListener) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.cardView);
             titulo_aviso = (TextView) itemView.findViewById(R.id.titulo_aviso);
             Logo = (ImageView) itemView.findViewById(R.id.imagen_aviso);
             fecha=(TextView)itemView.findViewById(R.id.fecha_publicada);
+            this.onAvisoListener = onAvisoListener;
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v) {
+            onAvisoListener.onAvisoClick(getAdapterPosition(), arrayavisos.get(getAdapterPosition()));
         }
     }
 
     @Override
     public AvisosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cartas_noticias, parent, false);
-        AvisosViewHolder cvh = new AvisosViewHolder(view);
+        AvisosViewHolder cvh = new AvisosViewHolder(view, mOnAvisoListener);
         return cvh;
     }
 
@@ -87,5 +96,9 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Aviso
     @Override
     public int getItemCount() {
         return arrayavisos.size();
+    }
+
+    public interface OnAvisoListener{
+        void onAvisoClick(int position, Aviso aviso);
     }
 }

@@ -211,12 +211,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
-                                    Toast.LENGTH_SHORT).show();
 
-                            //   cargando.setVisibility(View.GONE);
+                            //Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
+                                  //  Toast.LENGTH_SHORT).show();
 
-                            iniciarsesion();
+                            //iniciarsesion();
                         } else {
                             progressDialog.dismiss();
                             user.delete();
@@ -238,12 +237,23 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 progressDialog.dismiss();
-                                Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
-                                        Toast.LENGTH_SHORT).show();
+                                mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(MainActivity.this, "Se ha registrado exitosamente, verifique su correo",
+                                                    Toast.LENGTH_SHORT).show();
 
-                                //   cargando.setVisibility(View.GONE);
+                                            //   cargando.setVisibility(View.GONE);
 
-                                iniciarsesion();
+                                            iniciarsesion();
+                                        }else{
+                                            Toast.makeText(MainActivity.this, "Registro fallido",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                             } else {
                                 progressDialog.dismiss();
                                 user.delete();
@@ -266,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 progressDialog.dismiss();
+
                                 Toast.makeText(MainActivity.this, "Se ha registrado exitosamente",
                                         Toast.LENGTH_SHORT).show();
 
