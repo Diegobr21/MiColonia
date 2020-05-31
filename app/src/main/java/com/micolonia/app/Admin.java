@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ private TextView usercolonia;
     Button morosos, alpha;
     EditText edt_usuario_buscar;
     FloatingActionButton publicar_admin;
+    ImageView buzon;
     private DocumentReference usuRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -54,7 +56,9 @@ private TextView usercolonia;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        getSupportActionBar().hide();
 
+        buzon = findViewById(R.id.btn_buzon_admin);
         publicar_admin = findViewById(R.id.floatingpublicar_admin);
         edt_usuario_buscar= findViewById(R.id.busqueda_usu);
         busqueda_usu = findViewById(R.id.btn_filtros_admin);
@@ -89,7 +93,7 @@ private TextView usercolonia;
             @Override
             public void onClick(View v) {
 
-                String usuario = edt_usuario_buscar.getText().toString().trim();
+                String usuario = edt_usuario_buscar.getText().toString().toUpperCase().trim();
                 showUser(usuario);
 
             }
@@ -115,6 +119,13 @@ private TextView usercolonia;
                 publicar_Admin();
             }
         });
+
+        buzon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buzonAdmin();
+            }
+        });
     }
 
     private void publicar_Admin(){
@@ -124,6 +135,12 @@ private TextView usercolonia;
         startActivity(intent_a);
 
     }
+
+    private void buzonAdmin(){
+        Intent intent_b = new Intent(this, BuzonAdmin.class );
+        startActivity(intent_b);
+    }
+
     public String gettingColonia(){
         usuRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -180,6 +197,8 @@ private TextView usercolonia;
                                 for (DocumentSnapshot doc : task.getResult()) {
                                     Usuario usuario = doc.toObject(Usuario.class);
                                     usuario.id= doc.getId();
+                                    usuario.getId();
+
                                     arrayusuarios.add(usuario);
                                 }
 

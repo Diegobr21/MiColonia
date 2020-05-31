@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.zolad.zoominimageview.ZoomInImageView;
 
 import java.util.Map;
 
@@ -37,16 +39,17 @@ public class Imagen_venta extends AppCompatActivity {
     private TextView costo;
     private TextView titulo;
     private TextView contacto;
-    private ImageView imagenventa;
+    private ZoomInImageView imagenventa;
     private ImageView wha;
     private ImageView back;
     private ImageButton delete;
+    public Button editar;
 
     //Firebase
     private DocumentReference usuRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    public String current_tipo, postId, current_colonia;
+    public String current_tipo, postId, current_colonia, propietario_post, id_usu;
 
     Venta venta;
 
@@ -62,6 +65,7 @@ public class Imagen_venta extends AppCompatActivity {
         //email_current_user=user.getEmail();
         usuRef=db.collection("usuarios").document(user.getUid());
 
+        editar = findViewById(R.id.btn_editar_venta);
         delete = findViewById(R.id.delete_venta);
         back=findViewById(R.id.backbtnven);
         img_tel=findViewById(R.id.img_tel);
@@ -72,13 +76,23 @@ public class Imagen_venta extends AppCompatActivity {
         imagenventa=findViewById(R.id.imagen_pub_venta);
         contacto=findViewById(R.id.contacto_venta);
 
-        Venta venta = getIntent().getParcelableExtra("venta");
+        final Venta venta = getIntent().getParcelableExtra("publicacion");
 
         titulo.setText(venta.getName());
         postId = venta.getId();
         descgeneral.setText(venta.getDescripcion());
         costo.setText("$ " + venta.getCosto());
         contacto.setText(": "+venta.getTelefono());
+        propietario_post = venta.getId_usu();
+
+        //Editar
+        editar.setVisibility(View.GONE);
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gettingColonia(1);
+            }
+        });
 
         //Delete
         delete.setVisibility(View.GONE);
@@ -86,7 +100,7 @@ public class Imagen_venta extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gettingColonia();
+                gettingColonia(0);
             }
         });
 
@@ -131,9 +145,16 @@ public class Imagen_venta extends AppCompatActivity {
             imagenventa.setImageResource(R.drawable.logonegropng);
         }
 
+        imagenventa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onImageClick(venta);
+            }
+        });
+
     }
 
-    public String gettingColonia(){
+    public String gettingColonia(final int opcion){
         usuRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -143,7 +164,12 @@ public class Imagen_venta extends AppCompatActivity {
                             Map<String, Object> usu = documentSnapshot.getData();
                             current_colonia = usu.get("colonia").toString().trim();
                             //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
-                            deletePost(current_colonia);
+
+                            if(opcion == 0){
+                                deletePost(current_colonia);
+                            }else if(opcion == 1){
+                                EditPost(current_colonia, postId);
+                            }
 
 
                         }else{
@@ -173,6 +199,10 @@ public class Imagen_venta extends AppCompatActivity {
                             if (current_tipo.equals("2")){
                                 delete.setVisibility(View.VISIBLE);
                             }
+                            id_usu = mAuth.getCurrentUser().getUid();
+                            if(id_usu.equals(propietario_post)){
+                                editar.setVisibility(View.VISIBLE);
+                            }
 
                         }else{
                             Toast.makeText(Imagen_venta.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
@@ -186,6 +216,15 @@ public class Imagen_venta extends AppCompatActivity {
                     }
                 });
         return current_tipo;
+    }
+
+    private void EditPost(String c_colonia, String id_post){
+        Intent intedit = new Intent(this, Formato_pub_venta.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("post_id", id_post);
+        bundle.putString("colonia", c_colonia);
+        intedit.putExtras(bundle);
+        startActivity(intedit);
     }
 
     private void deletePost(final String colonia){
@@ -276,6 +315,22 @@ public class Imagen_venta extends AppCompatActivity {
                 Toast.makeText(this, "No se ha concedido el permiso de llamada", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void onImageClick(Venta venta){
+        String imguri ="";
+        if(venta.getImagen().isEmpty()){
+            Toast.makeText(this, "No hay imagen", Toast.LENGTH_SHORT).show();
+
+        }else{
+            imguri = venta.getImagen();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("imagen", imguri);
+
+        Intent fullscreen = new Intent(this, FullScreen_Ventas.class);
+        fullscreen.putExtras(bundle);
+        startActivity(fullscreen);
     }
 
 }

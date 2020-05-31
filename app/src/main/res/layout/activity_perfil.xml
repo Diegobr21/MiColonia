@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+    android:orientation="vertical"
     tools:context=".Perfil">
     <com.google.android.material.appbar.AppBarLayout
 
@@ -98,6 +98,7 @@
             app:srcCompat="@drawable/ic_filter_list_black_24dp"
             ></ImageButton>
 
+
         <Button
             android:id="@+id/btn_a_publicar"
             android:layout_width="200dp"
@@ -107,13 +108,16 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/botoncircular"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/ic_create_black_24dp"
+            android:drawableTint="@android:color/white"
+            android:padding="8dp"
             android:text="@string/publicar"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <Button
             android:id="@+id/lector_qr"
@@ -129,12 +133,31 @@
             android:text="Lector QR"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btn_admin"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_a_publicar"></Button>
 
         <Button
-            android:id="@+id/btn_avisodeprivacidad"
+            android:id="@+id/btn_buzon_comentarios"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/ic_mail_black_24dp"
+            android:padding="8dp"
+            android:text="Buzón Comentarios"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lector_qr"></Button>
+
+        <Button
+            android:id="@+id/btn_contacto"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -143,29 +166,17 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/botoncircular"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:text="@string/avipriv"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/btn_contacto"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lector_qr" />
-
-        <Button
-            android:id="@+id/btn_contacto"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/botoncircular"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:textColor="@android:color/white"
             android:text="@string/contacto"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_phone_black_24dp"
+            android:padding="8dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_ayuda"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_buzon_comentarios"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/btn_ayuda"
@@ -174,6 +185,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:drawableLeft="@drawable/ic_help_24dp"
             android:background="@drawable/botoncircular"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@android:color/white"
@@ -195,6 +208,8 @@
             android:textColor="@android:color/white"
             android:text="@string/cerrses"
             android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_out_24dp"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

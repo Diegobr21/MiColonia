@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Mi Colonia</string>
+    <string name="drawer_cierre">Cerrar el drawer</string>
+    <string name="drawer_abrir">Abrir el drawer</string>
     <string name="contactanos">¡Contactanos, con gusto te atenderemos!</string>
     <string name="x">¿Tienes alguna sugerencia?\n Es bienvenida, queremos brindarte la mejor experiencia posible</string>
     <string name="x2">Dudas, Sugerencias y/o Informes:</string>
@@ -25,14 +27,14 @@
         de pedidos en caso que aplique, y mejorar nuestro servicio. \nEs posible que sean enviados correos electrónicos,
         estos correos electrónicos serán enviados a la dirección que usted proporcione y podrán ser cancelados en cualquier momento.\n \n
 
-Las_Hadas_App está altamente comprometida para cumplir con el compromiso de mantener su información segura.
+MiColonia_App está altamente comprometida para cumplir con el compromiso de mantener su información segura.
         \n Usamos los sistemas más avanzados y los actualizamos constantemente para asegurarnos que no exista ningún acceso no autorizado.</string>
     <string name="avisopriv4">Esta aplicación no venderá, cederá ni distribuirá la información personal
          sin su consentimiento, salvo que sea requerido por un juez con una orden judicial.\n \n
 
-Las_Hadas_App Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.\n \n
+MiColonia_App Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.\n \n
 
-Estos términos y el manejo de privacidad son aplicados y acatados a partir de julio del 2019.</string>
+Estos términos y el manejo de privacidad son aplicados y acatados a partir de marzo del 2020.</string>
     <string name="cerrses">Cerrar Sesión</string>
     <string name="ayuda">Ayuda</string>
     <string name="avipriv">Aviso de Privacidad</string>

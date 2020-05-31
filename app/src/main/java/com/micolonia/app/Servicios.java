@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class Servicios extends AppCompatActivity {
     public static final int REQUEST_CALL = 1;
     private TextView descgeneral;
+    private TextView direccion_serv;
     private TextView Nom_negocio;
     private TextView horarios;
     private TextView contacto;
@@ -44,12 +46,13 @@ public class Servicios extends AppCompatActivity {
     private ImageView wha;
     private ImageView back;
     private ImageButton delete;
+    public Button editar;
 
     //Firebase
     private DocumentReference usuRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    public String current_tipo, postId, current_colonia;
+    public String current_tipo, postId, current_colonia, propietario_post, id_usu;
 
 
     @Override
@@ -65,20 +68,32 @@ public class Servicios extends AppCompatActivity {
         //email_current_user=user.getEmail();
         usuRef=db.collection("usuarios").document(user.getUid());
 
+        editar = findViewById(R.id.btn_editar_servicios);
         delete = findViewById(R.id.delete_servicio);
         back=findViewById(R.id.backbtnserv);
         wha= findViewById(R.id.wha);
         img_tel = findViewById(R.id.img_tel);
         descgeneral= findViewById(R.id.desc_negser);
+        direccion_serv = findViewById(R.id.direccion_negser);
         Nom_negocio=findViewById(R.id.titulo_servicios);
         horarios=findViewById(R.id.horarios_negser);
         contacto=findViewById(R.id.contacto_negser);
         imagenser=findViewById(R.id.imagen_negocioser);
 
-        NegocioSer servicio = getIntent().getParcelableExtra("servicio");
+        final NegocioSer servicio = getIntent().getParcelableExtra("publicacion");
 
         Nom_negocio.setText(servicio.getName());
         postId = servicio.getId();
+        propietario_post = servicio.getId_usu();
+
+        //Editar
+        editar.setVisibility(View.GONE);
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gettingColonia(1);
+            }
+        });
 
         if(servicio.getImagen().isEmpty()){
             imagenser.setImageResource(R.drawable.wreck);
@@ -86,7 +101,15 @@ public class Servicios extends AppCompatActivity {
             Glide.with(this).load(servicio.getImagen()).circleCrop().into(imagenser);
         }
 
+        imagenser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onImageClick(servicio);
+            }
+        });
+
         horarios.setText("Horario Activo: "+servicio.getHorario());
+        direccion_serv.setText("Dirección: " + servicio.getDireccion());
         descgeneral.setText(servicio.getDescripcion());
         img_tel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +144,7 @@ public class Servicios extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gettingColonia();
+                gettingColonia(0);
             }
         });
 
@@ -141,7 +164,7 @@ public class Servicios extends AppCompatActivity {
 
     }
 
-    public String gettingColonia(){
+    public String gettingColonia(final int opcion){
         usuRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -151,7 +174,11 @@ public class Servicios extends AppCompatActivity {
                             Map<String, Object> usu = documentSnapshot.getData();
                             current_colonia = usu.get("colonia").toString().trim();
                             //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
-                            deletePost(current_colonia);
+                            if(opcion == 0){
+                                deletePost(current_colonia);
+                            }else if(opcion == 1){
+                                EditPost(current_colonia, postId);
+                            }
 
 
                         }else{
@@ -181,6 +208,10 @@ public class Servicios extends AppCompatActivity {
                             if (current_tipo.equals("2")){
                                 delete.setVisibility(View.VISIBLE);
                             }
+                            id_usu = mAuth.getCurrentUser().getUid();
+                            if(id_usu.equals(propietario_post)){
+                                editar.setVisibility(View.VISIBLE);
+                            }
 
                         }else{
                             Toast.makeText(Servicios.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
@@ -195,6 +226,17 @@ public class Servicios extends AppCompatActivity {
                 });
         return current_tipo;
     }
+
+    private void EditPost(String c_colonia, String id_post){
+        Intent intedit = new Intent(this, Formato_pub_serv.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("post_id", id_post);
+        bundle.putString("colonia", c_colonia);
+        intedit.putExtras(bundle);
+        startActivity(intedit);
+    }
+
+
 
     private void deletePost(final String colonia){
 
@@ -299,6 +341,23 @@ public class Servicios extends AppCompatActivity {
          }
 
       */
+
+    private void onImageClick(NegocioSer servicio){
+        String imguri ="";
+        if(servicio.getImagen().isEmpty()){
+            Toast.makeText(this, "No hay imagen", Toast.LENGTH_SHORT).show();
+
+        }else{
+            imguri = servicio.getImagen();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("imagen", imguri);
+
+        Intent fullscreen = new Intent(this, FullScreen_Servicios.class);
+        fullscreen.putExtras(bundle);
+        startActivity(fullscreen);
+    }
+
     private void loadFragment(Fragment fragment){
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction= manager.beginTransaction();

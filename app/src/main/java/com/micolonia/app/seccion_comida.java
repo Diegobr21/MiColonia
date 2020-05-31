@@ -2,6 +2,7 @@ package com.micolonia.app;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,11 +22,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
@@ -33,6 +37,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,17 +48,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class seccion_comida extends AppCompatActivity implements RecyclerViewAdapter_comida.OnNegocioListener {
+public class seccion_comida extends AppCompatActivity implements RecyclerViewAdapter_comida.OnNegocioListener,
+        NavigationView.OnNavigationItemSelectedListener {
     private AdapterViewFlipper flip_comida;
     public Button noticias;
     ImageView perfil;
+    private DrawerLayout drawercomida;
     FloatingActionButton publicar;
     SwipeRefreshLayout refreshLayout;
     RecyclerView recyclerView_com;
     Context context;
     private List<NegocioCom> arraycomida;
     private List<Imagen> arrayimagenes;
-    public String current_colonia;
+    public String current_colonia, current_tipo;
 
     private DocumentReference usuRef;
     private FirebaseFirestore db;
@@ -60,7 +69,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seccion_comida);
-        getSupportActionBar().hide();
+       // getSupportActionBar().hide();
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -77,12 +86,25 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         gettingColonia();
         addImages();
 
+        //Toolbar
+        Toolbar toolbar = findViewById(R.id.comida_toolbar);
+        setSupportActionBar(toolbar);
+
+        drawercomida = findViewById(R.id.nav_drawerlayoutCOM);
+        NavigationView navigationView = findViewById(R.id.navigation_comida);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawercomida, toolbar,
+                R.string.drawer_abrir, R.string.drawer_cierre);
+        drawercomida.addDrawerListener(toggle);
+        toggle.syncState();
+
         publicar = findViewById(R.id.floatingpublicar);
         flip_comida = (AdapterViewFlipper) findViewById(R.id.flipper_comida);
         noticias = findViewById(R.id.btn_inicio);
         // servicio = findViewById(R.id.btn_servicio);
         // ventas = findViewById(R.id.btn_ventas);
-        perfil = findViewById(R.id.btn_ing_perfil);
+        //perfil = findViewById(R.id.btn_ing_perfil);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -92,6 +114,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
             }
         });
 
+        /*
         perfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +125,7 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
             }
         });
 
+         */
         noticias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,12 +146,118 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
 
     }
 
+    public void gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                toAdminLayout();
+                            }else{
+                                Toast.makeText(seccion_comida.this, "No es jefe de colonos", Toast.LENGTH_LONG).show();
+                            }
+
+                        }else{
+                            Toast.makeText(seccion_comida.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(seccion_comida.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if(drawercomida.isDrawerOpen(GravityCompat.START)){
+            drawercomida.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
+
+    }
+    private void fueradeapp() {
+        FirebaseAuth.getInstance().signOut();
+
+        finish();
+        Intent intent = new Intent(this, InicioSesion.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+    }
+
+    private void toAdminLayout(){
+        Intent intentadmin = new Intent(this, Admin.class);
+
+        startActivity(intentadmin);
+    }
+
+    private void contacto() {
+        Intent intent3 = new Intent(this, Contacto.class);
+
+        startActivity(intent3);
+    }
+
+
+    private void ayuda() {
+
+        Intent intent5 = new Intent(this, Ayuda.class);
+
+        startActivity(intent5);
+    }
+
+    private void QR(){
+        Intent intent6 = new Intent(this, LectorQR.class);
+
+        startActivity(intent6);
+    }
+
+    private void a_buzon(){
+        Intent intent8 = new Intent(this, Buzon_Comentarios.class);
+
+        startActivity(intent8);
+    }
+
+    private void dialogoalerta() {
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Cierre de Sesión");
+        builder.setMessage("¿Quieres cerrar sesión?");
+        //listeners de los botones
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fueradeapp();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    /*
     public void verperfil() {
         Intent intentperfil = new Intent(this, Perfil.class);
         intentperfil.putExtra("Remitente","DesdeComida");
         startActivity(intentperfil);
     }
 
+     */
     public void vernoticias() {
         Intent intentvernoti = new Intent(this, Inicio.class);
 
@@ -310,8 +440,45 @@ public class seccion_comida extends AppCompatActivity implements RecyclerViewAda
         arraycomida.get(position);
         //checar y mandar al negocio correspondiente
         Intent vernegocio_com_intent = new Intent(this, Comida.class);
-        vernegocio_com_intent.putExtra("comida", negocioCom);
+        vernegocio_com_intent.putExtra("publicacion", negocioCom);
         startActivity(vernegocio_com_intent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_publicar:
+                verpublicar();
+                break;
+
+            case R.id.nav_qr:
+                QR();
+                break;
+
+            case R.id.nav_buzon:
+                a_buzon();
+                break;
+
+            case R.id.nav_admin:
+                gettingTipo();
+                break;
+
+            case R.id.nav_contacto:
+                contacto();
+                break;
+
+            case R.id.nav_ayuda:
+                ayuda();
+                break;
+
+            case R.id.nav_cerrar_sesion:
+                dialogoalerta();
+                break;
+
+        }
+
+        drawercomida.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
 
@@ -374,6 +541,7 @@ class NegocioCom implements Parcelable {
     String imagen;
     String telefono;
     String descripcion;
+    String direccion;
     String horario;
     String elemento1;
     String elemento2;
@@ -381,6 +549,7 @@ class NegocioCom implements Parcelable {
     String elemento4;
     String elemento5;
     String elemento6;
+    String id_usu;
 
 
     NegocioCom(String name, int logoId) {
@@ -399,6 +568,7 @@ class NegocioCom implements Parcelable {
         id_colonia = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
+        direccion = in.readString();
         horario = in.readString();
         elemento1 = in.readString();
         elemento2 = in.readString();
@@ -406,6 +576,7 @@ class NegocioCom implements Parcelable {
         elemento4 = in.readString();
         elemento5 = in.readString();
         elemento6 = in.readString();
+        id_usu = in.readString();
 
     }
 
@@ -418,6 +589,7 @@ class NegocioCom implements Parcelable {
         dest.writeString(id_colonia);
         dest.writeString(telefono);
         dest.writeString(descripcion);
+        dest.writeString(direccion);
         dest.writeString(horario);
         dest.writeString(elemento1);
         dest.writeString(elemento2);
@@ -425,6 +597,7 @@ class NegocioCom implements Parcelable {
         dest.writeString(elemento4);
         dest.writeString(elemento5);
         dest.writeString(elemento6);
+        dest.writeString(id_usu);
     }
 
     @Override
@@ -468,6 +641,14 @@ class NegocioCom implements Parcelable {
         this.imagen = imagen;
     }
 
+    public String getId_usu() {
+        return id_usu;
+    }
+
+    public void setId_usu(String id_usu) {
+        this.id_usu = id_usu;
+    }
+
     public String getId_colonia() {
         return id_colonia;
     }
@@ -482,6 +663,14 @@ class NegocioCom implements Parcelable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getTelefono() {

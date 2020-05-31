@@ -37,20 +37,42 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:targetApi="o" />
 
-    <EditText
+    <TextView
         android:id="@+id/fecha_aviso"
         android:layout_width="330dp"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:textAlignment="center"
-        android:hint="dia/mes/año"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:nextFocusDown="@id/btn_publicar_aviso_admin"
+        android:text=""
+        android:textSize="18sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contenido_aviso"
-        tools:targetApi="o" />
+         />
+
+    <TextView
+        android:id="@+id/txtview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Comentarios disponibles: "
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_publicar_aviso_admin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fecha_aviso"></TextView>
+
+    <Switch
+        android:id="@+id/switch_comentarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@color/naranja"
+        app:layout_constraintBottom_toTopOf="@+id/btn_publicar_aviso_admin"
+        app:layout_constraintStart_toEndOf="@+id/txtview"
+        app:layout_constraintTop_toBottomOf="@+id/fecha_aviso" />
 
     <Button
         android:id="@+id/btn_publicar_aviso_admin"

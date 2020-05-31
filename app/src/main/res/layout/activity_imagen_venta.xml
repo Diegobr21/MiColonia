@@ -84,7 +84,23 @@
                 app:layout_constraintStart_toEndOf="@+id/imagen_pub_venta"
                 app:layout_constraintTop_toBottomOf="@+id/titulo_venta"></ImageButton>
 
-            <ImageView
+            <Button
+                android:id="@+id/btn_editar_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:text="Editar"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/imagen_pub_venta"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titulo_venta"></Button>
+
+            <com.zolad.zoominimageview.ZoomInImageView
                 android:id="@+id/imagen_pub_venta"
                 android:layout_width="260dp"
                 android:layout_height="270dp"
@@ -101,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="5dp"
                 android:textAlignment="center"
                 android:textAllCaps="true"

@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,12 +39,14 @@ public class Comida extends AppCompatActivity {
     private TextView descgeneral;
     private TextView Nom_negocio;
     private TextView horarios;
+    private TextView direccion;
     private TextView contacto;
     private ImageView imagencom;
     private ImageView img_tel;
     private ImageView wha;
     private ImageView back;
     private ImageButton delete;
+    public Button editar;
     //  protected ArrayList<String> platillos= new ArrayList<String>();
     //  protected ArrayList<String> descripciones= new ArrayList<String>();
     //  protected ArrayList<Integer> precios= new ArrayList<Integer>();
@@ -52,7 +55,7 @@ public class Comida extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     // private String email_current_user;
-    public String current_tipo, postId, current_colonia;
+    public String current_tipo, postId, current_colonia, id_usu, propietario_post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +69,23 @@ public class Comida extends AppCompatActivity {
         //email_current_user=user.getEmail();
         usuRef=db.collection("usuarios").document(user.getUid());
 
+        editar = findViewById(R.id.btn_editar_comida);
         delete = findViewById(R.id.delete_comida);
         back=findViewById(R.id.backbtncom);
         descgeneral = findViewById(R.id.desc_negcom);
+        direccion = findViewById(R.id.direccion_negcom);
         Nom_negocio = findViewById(R.id.titulo_comida);
         horarios = findViewById(R.id.horarios_negcom);
         imagencom= findViewById(R.id.imagen_negociocom);
         contacto = findViewById(R.id.contacto_negcom);
         img_tel= findViewById(R.id.img_tel);
         wha=findViewById(R.id.wha);
-        NegocioCom comida = getIntent().getParcelableExtra("comida");
+        final NegocioCom comida = getIntent().getParcelableExtra("publicacion");
         postId = comida.getId();
+        propietario_post = comida.getId_usu();
 
+        //Editar
+        editar.setVisibility(View.GONE);
 
 
         Nom_negocio.setText(comida.getName());
@@ -89,6 +97,12 @@ public class Comida extends AppCompatActivity {
             Glide.with(this).load(comida.getImagen()).circleCrop().into(imagencom);
         }
 
+        imagencom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onImageClick(comida);
+            }
+        });
         horarios.setText("Horario Activo: "+comida.getHorario());
         descgeneral.setText(comida.getDescripcion());
         img_tel.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +118,13 @@ public class Comida extends AppCompatActivity {
             }
         });
         String telefono = comida.getTelefono().trim();
+        String dir = comida.getDireccion().trim();
+        if(!dir.isEmpty() && dir != null){
+            direccion.setText("Dirección: " + dir);
+        }else{
+            direccion.setText("Dirección: N/A");
+        }
+
 
         contacto.setText(": "+ telefono);
         contacto.setOnClickListener(new View.OnClickListener() {
@@ -119,13 +140,21 @@ public class Comida extends AppCompatActivity {
             }
         });
 
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gettingColonia(1);
+            }
+        });
+
         //Delete
         delete.setVisibility(View.GONE);
         gettingTipo();
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gettingColonia();
+                //Toast.makeText(Comida.this, comida.getId_usu(), Toast.LENGTH_LONG).show();
+                gettingColonia(0);
             }
         });
 
@@ -174,7 +203,7 @@ public class Comida extends AppCompatActivity {
         loadFragment(fragment);
     }
 
-    public String gettingColonia(){
+    public String gettingColonia(final int opcion){
         usuRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -184,7 +213,11 @@ public class Comida extends AppCompatActivity {
                             Map<String, Object> usu = documentSnapshot.getData();
                             current_colonia = usu.get("colonia").toString().trim();
                             //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
-                            deletePost(current_colonia);
+                            if(opcion == 0){
+                                deletePost(current_colonia);
+                            }else if(opcion == 1){
+                                EditPost(current_colonia, postId);
+                            }
 
 
                         }else{
@@ -214,6 +247,10 @@ public class Comida extends AppCompatActivity {
                             if (current_tipo.equals("2")){
                                 delete.setVisibility(View.VISIBLE);
                             }
+                            id_usu = mAuth.getCurrentUser().getUid();
+                            if(id_usu.equals(propietario_post)){
+                                editar.setVisibility(View.VISIBLE);
+                            }
 
                         }else{
                             Toast.makeText(Comida.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
@@ -233,6 +270,16 @@ public class Comida extends AppCompatActivity {
         Intent intentc = new Intent(this, seccion_comida.class);
         startActivity(intentc);
         finish();
+    }
+
+    private void EditPost(String colonia, String id_post){
+        Intent intedit = new Intent(this, Formato_pub_comida.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("post_id", id_post);
+        bundle.putString("colonia", colonia);
+        intedit.putExtras(bundle);
+        startActivity(intedit);
+
     }
     private void deletePost(final String colonia){
 
@@ -329,6 +376,22 @@ public class Comida extends AppCompatActivity {
         return rating;
     }
     */
+
+    private void onImageClick(NegocioCom comida){
+        String imguri ="";
+        if(comida.getImagen().isEmpty()){
+            Toast.makeText(this, "No hay imagen", Toast.LENGTH_SHORT).show();
+
+        }else{
+            imguri = comida.getImagen();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("imagen", imguri);
+
+        Intent fullscreen = new Intent(this, FullScreen_Comida.class);
+        fullscreen.putExtras(bundle);
+        startActivity(fullscreen);
+    }
 
    private void loadFragment(Fragment fragment) {
         FragmentManager manager = getSupportFragmentManager();

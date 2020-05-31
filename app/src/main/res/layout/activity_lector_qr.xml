@@ -10,17 +10,27 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="monospace"
         android:text="Lector QR"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></TextView>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/qricon"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <TextView
         android:id="@+id/txt_qr"
@@ -28,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:padding="5dp"
+        android:autoLink="all"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"></TextView>
@@ -37,9 +48,13 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Escanear QR"
+        android:text="Escanear"
+        android:textColor="@android:color/white"
         android:background="@drawable/botoncircular"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="@color/azul"
+        android:padding="8dp"
+        android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_qr"></Button>
@@ -50,8 +65,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Verificar"
+        android:textColor="@android:color/white"
         android:background="@drawable/botoncircular"
         android:backgroundTint="@android:color/holo_green_dark"
+        android:padding="8dp"
+        android:drawableLeft="@drawable/ic_check_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_escanear_qr"></Button>
@@ -61,7 +79,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="NOMBRE"
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +91,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="24dp"
-        android:text="CALLE"
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +102,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="NUMERO"
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@+id/calle_verify"
@@ -112,10 +127,36 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
-        android:text="FECHA"
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/numcalle_verify"></TextView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="monospace"
+        android:text="Generar Código QR"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/floating_qr"
+        app:layout_constraintEnd_toEndOf="parent"></TextView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:baselineAlignBottom="true"
+        android:overScrollMode="ifContentScrolls"
+        android:padding="2dp"
+        android:backgroundTint="@color/colorPrimary2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/qricon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

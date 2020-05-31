@@ -84,6 +84,20 @@
                 app:layout_constraintStart_toEndOf="@+id/imagen_negociocom"
                 app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
+            <Button
+                android:id="@+id/btn_editar_comida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:text="Editar"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></Button>
+
             <ImageView
                 android:id="@+id/imagen_negociocom"
                 android:layout_width="90dp"
@@ -144,23 +158,36 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/desc_negcom" />
+           <TextView
+               android:id="@+id/direccion_negcom"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginStart="5dp"
+               android:layout_marginTop="24dp"
+               android:layout_marginEnd="5dp"
+               android:textAlignment="center"
+               android:textColor="@android:color/black"
+               android:textSize="16sp"
+               android:textStyle="bold"
+               app:layout_constraintTop_toBottomOf="@+id/horarios_negcom"
+               ></TextView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="5dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horarios_negcom">
+                app:layout_constraintTop_toBottomOf="@+id/direccion_negcom">
 
                 <ImageView
                     android:id="@+id/wha"
-                    android:layout_width="35dp"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:src="@drawable/wha"
@@ -207,7 +234,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="440dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="490dp"
         android:layout_marginEnd="30dp"></FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

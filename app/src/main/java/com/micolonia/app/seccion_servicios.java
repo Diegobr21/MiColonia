@@ -2,6 +2,7 @@ package com.micolonia.app;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,11 +22,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
@@ -33,6 +37,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,18 +48,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class seccion_servicios extends AppCompatActivity implements RecyclerViewAdapter_servicios.OnNegocioSerListener {
+public class seccion_servicios extends AppCompatActivity implements RecyclerViewAdapter_servicios.OnNegocioSerListener,
+        NavigationView.OnNavigationItemSelectedListener {
     private AdapterViewFlipper flip_servicios;
     public Button noticias;
-    ImageView perfil;
+    //ImageView perfil;
     FloatingActionButton publicar;
     SwipeRefreshLayout refreshLayout;
+    private DrawerLayout drawerservicios;
     RecyclerView recyclerView_ser;
     Context context;
     private List<NegocioSer> arrayservicios;
     private List<Imagen> arrayimagenes;
 
-    public String current_colonia;
+    public String current_colonia, current_tipo;
 
     private DocumentReference usuRef;
     private FirebaseFirestore db;
@@ -62,7 +71,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seccion_servicios);
 
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         //Firebase
         db = FirebaseFirestore.getInstance();
@@ -80,11 +89,24 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         gettingColonia();
         addImages();
 
+        //Toolbar
+        Toolbar toolbar = findViewById(R.id.servicios_toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerservicios = findViewById(R.id.nav_drawerlayoutSER);
+        NavigationView navigationView = findViewById(R.id.navigation_servicios);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerservicios, toolbar,
+                R.string.drawer_abrir, R.string.drawer_cierre);
+        drawerservicios.addDrawerListener(toggle);
+        toggle.syncState();
+
         publicar = findViewById(R.id.floatingpublicar);
         flip_servicios = (AdapterViewFlipper) findViewById(R.id.flipper_servicios);
         noticias = findViewById(R.id.btn_noticias);
 
-        perfil = findViewById(R.id.btn_ing_perfil);
+        //perfil = findViewById(R.id.btn_ing_perfil);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -94,6 +116,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
             }
         });
 
+        /*
         perfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +125,7 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
             }
         });
 
+         */
         noticias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,10 +145,116 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
 
     }
 
+    /*
     public void verperfil() {
         Intent intentperfil = new Intent(this, Perfil.class);
         intentperfil.putExtra("Remitente","DesdeServicios");
         startActivity(intentperfil);
+    }
+     */
+
+    public void gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                toAdminLayout();
+                            }else{
+                                Toast.makeText(seccion_servicios.this, "No es jefe de colonos", Toast.LENGTH_LONG).show();
+                            }
+
+                        }else{
+                            Toast.makeText(seccion_servicios.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(seccion_servicios.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if(drawerservicios.isDrawerOpen(GravityCompat.START)){
+            drawerservicios.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
+
+    }
+    private void fueradeapp() {
+        FirebaseAuth.getInstance().signOut();
+
+        finish();
+        Intent intent = new Intent(this, InicioSesion.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+    }
+
+    private void toAdminLayout(){
+        Intent intentadmin = new Intent(this, Admin.class);
+
+        startActivity(intentadmin);
+    }
+
+    private void contacto() {
+        Intent intent3 = new Intent(this, Contacto.class);
+
+        startActivity(intent3);
+    }
+
+
+    private void ayuda() {
+
+        Intent intent5 = new Intent(this, Ayuda.class);
+
+        startActivity(intent5);
+    }
+
+    private void QR(){
+        Intent intent6 = new Intent(this, LectorQR.class);
+
+        startActivity(intent6);
+    }
+
+    private void a_buzon(){
+        Intent intent8 = new Intent(this, Buzon_Comentarios.class);
+
+        startActivity(intent8);
+    }
+
+    private void dialogoalerta() {
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Cierre de Sesión");
+        builder.setMessage("¿Quieres cerrar sesión?");
+        //listeners de los botones
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fueradeapp();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     public void vernoticias() {
@@ -301,8 +431,45 @@ public class seccion_servicios extends AppCompatActivity implements RecyclerView
         arrayservicios.get(position);
         //checar y mandar al negocio correspondiente
         Intent vernegocio_ser_intent = new Intent(this, Servicios.class);
-        vernegocio_ser_intent.putExtra("servicio", negocioSer);
+        vernegocio_ser_intent.putExtra("publicacion", negocioSer);
         startActivity(vernegocio_ser_intent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_publicar:
+                verpublicar();
+                break;
+
+            case R.id.nav_qr:
+                QR();
+                break;
+
+            case R.id.nav_buzon:
+                a_buzon();
+                break;
+
+            case R.id.nav_admin:
+                gettingTipo();
+                break;
+
+            case R.id.nav_contacto:
+                contacto();
+                break;
+
+            case R.id.nav_ayuda:
+                ayuda();
+                break;
+
+            case R.id.nav_cerrar_sesion:
+                dialogoalerta();
+                break;
+
+        }
+
+        drawerservicios.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
 
@@ -363,9 +530,11 @@ class NegocioSer implements Parcelable {
     int logoId;
     String id;
     String id_colonia;
+    String id_usu;
     String imagen;
     String telefono;
     String descripcion;
+    String direccion;
     String horario;
     String elemento1;
     String elemento2;
@@ -389,7 +558,9 @@ class NegocioSer implements Parcelable {
         id_colonia = in.readString();
         telefono = in.readString();
         descripcion = in.readString();
+        direccion = in.readString();
         horario = in.readString();
+        id_usu = in.readString();
         elemento1 = in.readString();
         elemento2 = in.readString();
         elemento3 = in.readString();
@@ -409,7 +580,9 @@ class NegocioSer implements Parcelable {
         dest.writeString(id_colonia);
         dest.writeString(telefono);
         dest.writeString(descripcion);
+        dest.writeString(direccion);
         dest.writeString(horario);
+        dest.writeString(id_usu);
         dest.writeString(elemento1);
         dest.writeString(elemento2);
         dest.writeString(elemento3);
@@ -473,6 +646,22 @@ class NegocioSer implements Parcelable {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public String getId_usu() {
+        return id_usu;
+    }
+
+    public void setId_usu(String id_usu) {
+        this.id_usu = id_usu;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getDescripcion() {

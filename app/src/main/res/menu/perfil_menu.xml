@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Acciones">
+        <menu>
+            <item
+                android:id="@+id/nav_publicar"
+                android:icon="@drawable/ic_create_black_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Publicar" />
+
+            <item
+                android:id="@+id/nav_qr"
+                android:icon="@drawable/ic_security_black_24dp"
+                android:title="Código QR" />
+
+            <item
+                android:id="@+id/nav_buzon"
+                android:icon="@drawable/ic_mail_black_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Buzon de Comentarios" />
+
+            <item
+                android:id="@+id/nav_admin"
+                android:icon="@drawable/ic_filter_list_black_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Jefe de colonos" />
+        </menu>
+    </item>
+
+    <item android:title="Más">
+        <menu>
+            <item
+                android:id="@+id/nav_contacto"
+                android:icon="@drawable/ic_phone_black_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Contacto" />
+            <item
+                android:id="@+id/nav_ayuda"
+                android:icon="@drawable/ic_help_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Ayuda" />
+            <item
+                android:id="@+id/nav_cerrar_sesion"
+                android:icon="@drawable/ic_out_24dp"
+                android:iconTint="@android:color/white"
+                android:title="Cerrar Sesión" />
+        </menu>
+    </item>
+
+</menu>

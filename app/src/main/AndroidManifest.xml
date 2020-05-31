@@ -15,7 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_micolonia_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeRegister">
-        <activity android:name=".Eliminar_Aviso"></activity>
+        <activity android:name=".Drawer_Inicio"></activity>
+        <activity android:name=".Buzon_Comentarios" />
+        <activity android:name=".BuzonAdmin" />
+        <activity android:name=".MisPublicaciones" />
+        <activity android:name=".FullScreen_Ventas" />
+        <activity android:name=".FullScreen_Servicios" />
+        <activity android:name=".FullScreen_Comida" />
+        <activity android:name=".Eliminar_Aviso" />
         <activity android:name=".GeneradorQR" />
         <activity
             android:name=".LectorQR"
@@ -33,13 +40,14 @@
         <activity android:name=".Formato_pub_comida" />
         <activity android:name=".Contacto" />
         <activity android:name=".Publicar" />
-        <activity android:name=".seccion_ventas" />
+        <activity android:name=".seccion_ventas" android:theme="@style/NoActionBar" />
         <activity android:name=".Servicios" />
-        <activity android:name=".seccion_servicios" />
-        <activity android:name=".seccion_comida" />
+        <activity android:name=".seccion_servicios" android:theme="@style/NoActionBar"/>
+        <activity android:name=".seccion_comida" android:theme="@style/NoActionBar" />
         <activity android:name=".Comida" />
         <activity android:name=".Perfil" />
-        <activity android:name=".Inicio">
+        <activity android:name=".Inicio" android:theme="@style/NoActionBar">
+
             <intent-filter>
                 <action android:name="com.micomunidad.lashadas.Inicio" />
 
@@ -80,6 +88,16 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="Canal_1_ID" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <service
             android:name=".MyFirebaseMessagingService"

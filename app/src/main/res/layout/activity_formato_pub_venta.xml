@@ -187,12 +187,30 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/botoncircular"
                 android:backgroundTint="@android:color/holo_red_light"
-                android:text="Guardar"
+                android:text="Publicar"
                 android:textColor="@color/amarillo"
                 android:layout_marginTop="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radiogroup" />
+                app:layout_constraintTop_toBottomOf="@+id/radiogroup"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <Button
+
+                android:id="@+id/btn_actualizar_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Actualizar"
+                android:textColor="@color/amarillo"
+                app:layout_constraintTop_toBottomOf="@+id/img_add_venta"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <Button
                 android:id="@+id/btn_3_v"

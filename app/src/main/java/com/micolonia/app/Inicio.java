@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,21 +24,27 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -46,8 +53,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnAvisoListener{
+public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnAvisoListener,
+        NavigationView.OnNavigationItemSelectedListener {
     private AdapterViewFlipper flip_inicio;
+    private DrawerLayout drawerini;
    //public ImageButton comida, servicio, ventas;
     public Button  comida, servicio, ventas;
     FloatingActionButton publicar;
@@ -55,15 +64,15 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
     RecyclerView recyclerView;
     ImageView perfil;
     ImageView imagen;
+    //TextView correo;
     Context context;
     private List<Aviso> arrayavisos;
     private List<Imagen> arrayimagenes;
-
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private DocumentReference usuRef;
     private String email_current_user;
-    public String current_colonia, colonia;
+    public String current_colonia, colonia, current_tipo;
 
 
 
@@ -91,14 +100,17 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
         }
 
 
+        Toolbar toolbar = findViewById(R.id.inicio_toolbar);
+        setSupportActionBar(toolbar);
+        //getSupportActionBar().hide();
 
-        getSupportActionBar().hide();
     //Firebase
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         email_current_user=user.getEmail();
         usuRef=db.collection("usuarios").document(user.getUid());
+
 
         try{
             colonia = gettingColonia();
@@ -109,6 +121,18 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
 //Toast.makeText(Inicio.this, "Num "+colonia, Toast.LENGTH_SHORT).show();
 
         refreshLayout=findViewById(R.id.refresh_layout_ini);
+
+
+        drawerini = findViewById(R.id.nav_drawerlayoutINI);
+        NavigationView navigationView = findViewById(R.id.navigation_inicio);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerini, toolbar,
+                R.string.drawer_abrir, R.string.drawer_cierre);
+        drawerini.addDrawerListener(toggle);
+        toggle.syncState();
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -180,6 +204,24 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
             }
         });
 
+        /*
+        if (savedInstanceState == null){
+            navigationView.setCheckedItem(R.id.nav_publicar);
+        }
+
+         */
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if(drawerini.isDrawerOpen(GravityCompat.START)){
+            drawerini.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
 
     }
 
@@ -215,6 +257,69 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
         startActivity(intentpublica);
     }
 
+    private void fueradeapp() {
+        FirebaseAuth.getInstance().signOut();
+
+        finish();
+        Intent intent = new Intent(this, InicioSesion.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+    }
+
+    private void toAdminLayout(){
+        Intent intentadmin = new Intent(this, Admin.class);
+
+        startActivity(intentadmin);
+    }
+
+    private void contacto() {
+        Intent intent3 = new Intent(this, Contacto.class);
+
+        startActivity(intent3);
+    }
+
+
+    private void ayuda() {
+
+        Intent intent5 = new Intent(this, Ayuda.class);
+
+        startActivity(intent5);
+    }
+
+    private void QR(){
+        Intent intent6 = new Intent(this, LectorQR.class);
+
+        startActivity(intent6);
+    }
+
+    private void a_buzon(){
+        Intent intent8 = new Intent(this, Buzon_Comentarios.class);
+
+        startActivity(intent8);
+    }
+
+    private void dialogoalerta() {
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Cierre de Sesión");
+        builder.setMessage("¿Quieres cerrar sesión?");
+        //listeners de los botones
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fueradeapp();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
     /**
      * TODO: Aquí se lee la información desde Firebase y se muestra en Firebase.
      */
@@ -243,6 +348,35 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
         return current_colonia;
     }
 
+    public void gettingTipo(){
+        usuRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        if (documentSnapshot.exists()){
+                            Map<String, Object> usu = documentSnapshot.getData();
+                            current_tipo = usu.get("tipo").toString().trim();
+                            //Toast.makeText(Perfil.this, current_tipo, Toast.LENGTH_SHORT).show();
+                            if (current_tipo.equals("2")){
+                                toAdminLayout();
+                            }else{
+                                Toast.makeText(Inicio.this, "No es jefe de colonos", Toast.LENGTH_LONG).show();
+                            }
+
+                        }else{
+                            Toast.makeText(Inicio.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Inicio.this,"Error!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
 
     private void addData(String colonia_avisos) {
         // Los datos en Firestore deben tener la estructura de modelo en JSON.
@@ -377,6 +511,43 @@ public class Inicio extends AppCompatActivity implements RecyclerViewAdapter.OnA
         ver_avisointent.putExtra("aviso", aviso);
         startActivity(ver_avisointent);
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_publicar:
+                verpublicar();
+                break;
+
+            case R.id.nav_qr:
+                    QR();
+                    break;
+
+            case R.id.nav_buzon:
+                    a_buzon();
+                    break;
+
+            case R.id.nav_admin:
+                    gettingTipo();
+                    break;
+
+            case R.id.nav_contacto:
+                contacto();
+                break;
+
+            case R.id.nav_ayuda:
+                ayuda();
+                break;
+
+            case R.id.nav_cerrar_sesion:
+                dialogoalerta();
+                break;
+
+        }
+
+        drawerini.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
 
 
@@ -443,6 +614,7 @@ class Aviso implements Parcelable {
     int tipo;
     String id_colonia;
     double timestamp;
+    String comentarios;
     //Siempre un constructor vacio.
 
     public Aviso() {
@@ -487,6 +659,14 @@ class Aviso implements Parcelable {
         this.imagen = imagen;
     }
 
+    public String getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(String comentarios) {
+        this.comentarios = comentarios;
+    }
+
     public String getFecha() {
         return fecha;
     }
@@ -523,6 +703,7 @@ class Aviso implements Parcelable {
         fecha = in.readString();
         logoId = in.readInt();
         tipo = in.readInt();
+        comentarios = in.readString();
 
     }
 
@@ -551,6 +732,7 @@ class Aviso implements Parcelable {
         dest.writeString(fecha);
         dest.writeInt(logoId);
         dest.writeInt(tipo);
+        dest.writeString(comentarios);
 
 
 

@@ -4,24 +4,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class Ayuda extends AppCompatActivity {
     public ImageButton derecha, izquierda;
+    ImageView aviso_privacidad;
    // Fragment fragment= null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ayuda);
+        getSupportActionBar().hide();
 
        // setTitle("Sección ayuda");
 
 
         derecha=findViewById(R.id.derecha);
         izquierda=findViewById(R.id.izq);
+        aviso_privacidad = findViewById(R.id.btn_info_aviso_privacidad);
+
+        aviso_privacidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a_avisoprivacidad();
+            }
+        });
+
+        //Fragmento
         fragmentayuda1();
 
         derecha.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +59,13 @@ public class Ayuda extends AppCompatActivity {
 
 
     }
+
+    private void a_avisoprivacidad() {
+        Intent intent4 = new Intent(this, AvisoPrivacidad.class);
+
+        startActivity(intent4);
+    }
+
     private void fragmentayuda1(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction  fragmentTransaction = fragmentManager.beginTransaction();

@@ -22,6 +22,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,17 +44,19 @@ import java.util.Map;
 public class Formato_pub_venta extends AppCompatActivity {
 
     private EditText nombre_negcom, contacto, descripcion, precio;
-   private Button inicio, guardar;
+   private Button inicio, guardar, actualizar;
    private RadioGroup radioGroup;
    private RadioButton radioButton;
     private ImageButton addpic;
     private ImageView pic;
     public static final int GALLERY_REQUEST_CODE = 105;
     public String imagen = "";
-    public String current_colonia, selectedType;
+    public String current_colonia, selectedType, id_usu, colonia_bundle="", post_id_bundle="";
+    public String set_imagen, _nombre_aviso,_celular, _precio, _descripcion_b;
+    public boolean new_img_upload = false;
     //String currentPhotoPath;
     StorageReference storageReference;
-    private DocumentReference usuRef;
+    private DocumentReference usuRef, postRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -71,14 +74,36 @@ public class Formato_pub_venta extends AppCompatActivity {
         addpic = findViewById(R.id.imgbtn_add_pic_venta);
         pic = findViewById(R.id.img_add_venta);
         radioGroup = findViewById(R.id.radiogroup);
-
         guardar = findViewById(R.id.btn_formato_venta);
+        actualizar = findViewById(R.id.btn_actualizar_venta);
+        actualizar.setVisibility(View.GONE);
+
 
         db= FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         usuRef=db.collection("usuarios").document(user.getUid());
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        //Editar
+        Bundle b = getIntent().getExtras();
+        if(b != null){
+            colonia_bundle = b.getString("colonia");
+            post_id_bundle = b.getString("post_id");
+            if(!colonia_bundle.isEmpty() && !post_id_bundle.isEmpty()){
+                //postRef=db.collection("").document(post_id_bundle);
+                EditPost(colonia_bundle, post_id_bundle);
+
+                final String usuario = user.getUid();
+                actualizar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Actualizar_Edited(usuario, colonia_bundle, post_id_bundle);
+                    }
+                });
+            }
+        }
+
 
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,8 +138,130 @@ public class Formato_pub_venta extends AppCompatActivity {
             selectedType = "Venta";
         }
         //Toast.makeText(this, selectedType, Toast.LENGTH_SHORT).show();
+    }
+
+    private void EditPost(String c_colonia, String post_id){
+        inicio.setVisibility(View.GONE);
+        guardar.setVisibility(View.GONE);
+        actualizar.setVisibility(View.VISIBLE);
+        radioGroup.setVisibility(View.GONE);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando");
+        progressDialog.show();
+        //Toast.makeText(this, post_id_bundle, Toast.LENGTH_LONG).show();
+        if(c_colonia.equals("1")){
+            db.collection("ventas_las_hadas").document(post_id)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            if (documentSnapshot.exists()) {
+                                Map<String, Object> post = documentSnapshot.getData();
+                                _nombre_aviso = post.get("name").toString().trim();
+                                _precio = post.get("costo").toString().trim();
+                                _celular = post.get("telefono").toString().trim();
+                                _descripcion_b = post.get("descripcion").toString().trim();
+                                set_imagen = post.get("imagen").toString().trim();
+
+
+                                nombre_negcom.setText(_nombre_aviso);
+                                precio.setText(_precio);
+                                contacto.setText(_celular);
+                                descripcion.setText(_descripcion_b);
+                                Glide.with(Formato_pub_venta.this).load(set_imagen).into(pic);
+
+                                progressDialog.dismiss();
+
+                            }else{
+                                Toast.makeText(Formato_pub_venta.this,"No se reconoció el id del post",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Formato_pub_venta.this,"Error!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }else if(c_colonia.equals("2")){
+
+            db.collection("ventas_mision_anahuac").document(post_id)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            if (documentSnapshot.exists()) {
+                                Map<String, Object> post = documentSnapshot.getData();
+                                _nombre_aviso = post.get("name").toString().trim();
+                                _precio = post.get("costo").toString().trim();
+                                _celular = post.get("telefono").toString().trim();
+                                _descripcion_b = post.get("descripcion").toString().trim();
+                                set_imagen = post.get("imagen").toString().trim();
+
+                                nombre_negcom.setText(_nombre_aviso);
+                                precio.setText(_precio);
+                                contacto.setText(_celular);
+                                descripcion.setText(_descripcion_b);
+                                Glide.with(Formato_pub_venta.this).load(set_imagen).into(pic);
+
+
+                                progressDialog.dismiss();
+
+                            }else{
+                                Toast.makeText(Formato_pub_venta.this,"No se reconoció el id del post",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Formato_pub_venta.this,"Error!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
+    }
+
+    //Solo se llama si se está editando el post
+    private void Actualizar_Edited(String uid, String colonia_id, String post_id) {
+        String nombre_negcom = this.nombre_negcom.getText().toString().trim();
+        String costo = this.precio.getText().toString().trim();
+        String contac_negcom = this.contacto.getText().toString().trim();
+        String desc_negcom = this.descripcion.getText().toString().trim();
+        String url = set_imagen;
+
+
+        if (nombre_negcom != _nombre_aviso || costo != _precio ||
+                contac_negcom != _celular || desc_negcom != _descripcion_b || imagen != url) {
+            if(colonia_id.equals("1")){
+                postRef = db.collection("ventas_las_hadas").document(post_id);
+            }else if(colonia_id.equals("2")){
+                postRef = db.collection("ventas_mision_anahuac").document(post_id);
+            }
+
+
+            if (new_img_upload){
+                url = imagen;
+            }
+            postRef.update("name", nombre_negcom);
+            postRef.update("costo", costo);
+            postRef.update("telefono", contac_negcom);
+            postRef.update("descripcion", desc_negcom);
+            postRef.update("imagen", url);
+
+
+            Toast.makeText(this, "Se han actualizado los datos", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "No se ha modificado ningún campo", Toast.LENGTH_SHORT).show();
+        }
 
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == GALLERY_REQUEST_CODE){
@@ -133,7 +280,7 @@ public class Formato_pub_venta extends AppCompatActivity {
         }
     }
 
-    public void ToastGuardar(String colonia){
+    public void ToastGuardar(String colonia, String id_usu){
         String nombre_negcom = this.nombre_negcom.getText().toString().trim();
         String precio = this.precio.getText().toString().trim();
         String contac_negcom = this.contacto.getText().toString().trim();
@@ -164,6 +311,7 @@ public class Formato_pub_venta extends AppCompatActivity {
             data.put("descripcion", desc_negcom);
             data.put("imagen", url);
             data.put("idType", idType);
+            data.put("id_usu", id_usu);
             // Este campo es importante, hará que no se muestre en la app hasta su aprobación.
             data.put("aprobado", 0);
 
@@ -226,7 +374,10 @@ public class Formato_pub_venta extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(String name, final Uri contentUri) {
-        final StorageReference image = storageReference.child("logos_servicios/" + name);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando");
+        progressDialog.show();
+        final StorageReference image = storageReference.child("logos_ventas/" + name);
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -235,9 +386,11 @@ public class Formato_pub_venta extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         Log.d("tag", "onSuccess: Uploaded Image URl is " + uri.toString());
                         imagen = uri.toString();
+                        new_img_upload = true;
                     }
                 });
 
+                progressDialog.dismiss();
                 Toast.makeText(Formato_pub_venta.this, "Imagen Recibida", Toast.LENGTH_SHORT).show();
 
 
@@ -266,7 +419,8 @@ public class Formato_pub_venta extends AppCompatActivity {
                         if (documentSnapshot.exists()){
                             Map<String, Object> usu = documentSnapshot.getData();
                             current_colonia = usu.get("colonia").toString().trim();
-                            ToastGuardar(current_colonia);
+                            id_usu = mAuth.getCurrentUser().getUid();
+                            ToastGuardar(current_colonia, id_usu);
 
                         }else{
                             Toast.makeText(Formato_pub_venta.this,"No existe el id_colonia del usuario", Toast.LENGTH_SHORT).show();

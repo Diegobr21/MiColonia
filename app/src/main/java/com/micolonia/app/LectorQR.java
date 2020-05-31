@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,7 +29,8 @@ import java.util.Map;
 
 public class LectorQR extends AppCompatActivity {
     private Button btnescanear_qr, btnverificar_qr;
-    private TextView txtqr, txtnom, txtcalle, txtnum, txtfecha;
+    private TextView txtqr, txtnom, txtcalle, txtnum, txtfecha, valido;
+    private FloatingActionButton generar_qr;
     //Firebase
     private DocumentReference usuRef;
     private FirebaseFirestore db;
@@ -50,15 +52,27 @@ public class LectorQR extends AppCompatActivity {
         btnescanear_qr = findViewById(R.id.btn_escanear_qr);
         btnverificar_qr = findViewById(R.id.btn_verifycode);
         txtqr = findViewById(R.id.txt_qr);
+        generar_qr = findViewById(R.id.floating_qr);
         txtcalle = findViewById(R.id.calle_verify);
         txtnom = findViewById(R.id.nom_verify);
         txtnum = findViewById(R.id.numcalle_verify);
         txtfecha = findViewById(R.id.fecha_validez);
+        valido = findViewById(R.id.textView10);
+
+        valido.setVisibility(View.GONE);
+
 
         btnescanear_qr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new IntentIntegrator(LectorQR.this).initiateScan();
+            }
+        });
+
+        generar_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generador_qr();
             }
         });
 
@@ -68,6 +82,12 @@ public class LectorQR extends AppCompatActivity {
                 gettingColonia();
             }
         });
+    }
+
+    private void generador_qr(){
+        Intent intent7 = new Intent(this, GeneradorQR.class);
+
+        startActivity(intent7);
     }
 
     public String gettingColonia(){
@@ -157,6 +177,7 @@ public class LectorQR extends AppCompatActivity {
                                     txtnom.setText(nombreusu);
                                     txtnum.setText("#" + numcalleusu);
                                     progressDialog.dismiss();
+                                    valido.setVisibility(View.VISIBLE);
 
 
                                 }else{

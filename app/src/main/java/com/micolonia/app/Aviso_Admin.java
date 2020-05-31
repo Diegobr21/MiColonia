@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,12 +19,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class Aviso_Admin extends AppCompatActivity {
 
-    EditText contenido, fecha;
+    EditText contenido;
     Button publicar_aviso_admin, regresoIni;
+    Switch act_comentarios;
+    TextView fecha;
+    private Calendar calendar;
+    private SimpleDateFormat dateFormat;
+    private String date;
+    public String comentarios_acts = "no";
     private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +42,29 @@ public class Aviso_Admin extends AppCompatActivity {
 
         db= FirebaseFirestore.getInstance();
 
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        date = dateFormat.format(calendar.getTime());
+        act_comentarios = findViewById(R.id.switch_comentarios);
         contenido = findViewById(R.id.contenido_aviso);
         fecha = findViewById(R.id.fecha_aviso);
+
+        getFecha();
+
         publicar_aviso_admin = findViewById(R.id.btn_publicar_aviso_admin);
         regresoIni = findViewById(R.id.rgr_inicio);
 
+        act_comentarios.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked==true){
+                    comentarios_acts = "si";
+                }
+                else{
+                    comentarios_acts = "no";
+                }
+            }
+        });
 
         regresoIni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +72,7 @@ public class Aviso_Admin extends AppCompatActivity {
                 regreso_Inicio();
             }
         });
+
 
         publicar_aviso_admin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,10 +88,17 @@ public class Aviso_Admin extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    private void getFecha(){
+        fecha.setText("Fecha: " + date);
+        //Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
     }
     private void publicarAdmin(String c_colonia) {
         String contenido_aviso = this.contenido.getText().toString().trim();
-        String fecha_aviso = this.fecha.getText().toString().trim();
+        String fecha_aviso = this.date;
 
 
         if (contenido_aviso.isEmpty() || fecha_aviso.isEmpty()) {
@@ -71,6 +109,7 @@ public class Aviso_Admin extends AppCompatActivity {
             data.put("name", contenido_aviso);
             data.put("fecha", fecha_aviso);
             data.put("id_colonia", c_colonia);
+            data.put("comentarios", comentarios_acts);
             final ProgressDialog dialog = new ProgressDialog(this);
             dialog.setMessage("Cargando");
             dialog.show();
@@ -85,7 +124,7 @@ public class Aviso_Admin extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     Aviso_Admin.this.contenido.getText().clear();
-                                    Aviso_Admin.this.fecha.getText().clear();
+
 
 
                                     Toast.makeText(Aviso_Admin.this,
@@ -109,7 +148,6 @@ public class Aviso_Admin extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     Aviso_Admin.this.contenido.getText().clear();
-                                    Aviso_Admin.this.fecha.getText().clear();
 
 
                                     Toast.makeText(Aviso_Admin.this,

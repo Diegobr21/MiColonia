@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class Perfil extends AppCompatActivity {
-    private Button cerrarsesion, ayuda, contacto, publicar, avisopriv, leer_qr;
+    private Button cerrarsesion, ayuda, contacto, publicar, leer_qr, buzon;
     private TextView title;
     private ImageButton back, admin;
     private FloatingActionButton generar_qr;
@@ -55,6 +55,7 @@ public class Perfil extends AppCompatActivity {
         generar_qr = findViewById(R.id.floating_qr);
         leer_qr = findViewById(R.id.lector_qr);
         ayuda = (Button) findViewById(R.id.btn_ayuda);
+        buzon = findViewById(R.id.btn_buzon_comentarios);
         cerrarsesion = (Button) findViewById(R.id.btn_cerrarsesion);
         publicar = (Button) findViewById(R.id.btn_a_publicar);
         contacto = (Button) findViewById(R.id.btn_contacto);
@@ -62,7 +63,6 @@ public class Perfil extends AppCompatActivity {
 
         title.setText("Perfil: "+ user.getEmail());
 
-        avisopriv = (Button) findViewById(R.id.btn_avisodeprivacidad);
 
 
         /*Obtener el valor del string del intent, y creando diferentes intents para regresar a la actividad
@@ -77,6 +77,14 @@ public class Perfil extends AppCompatActivity {
                 backto(intentremitente);
             }
         });
+
+        buzon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a_buzon();
+            }
+        });
+
 
         //ADMIN STUFF
         admin.setVisibility(View.GONE);
@@ -105,6 +113,7 @@ public class Perfil extends AppCompatActivity {
             }
         });
 
+
         contacto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,13 +130,6 @@ public class Perfil extends AppCompatActivity {
             }
         });
 
-        avisopriv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                avisoprivacidad();
-            }
-        });
 
         leer_qr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +216,8 @@ public class Perfil extends AppCompatActivity {
         startActivity(intent2);
     }
 
+
+
     private void toAdminLayout(){
         Intent intentadmin = new Intent(this, Admin.class);
 
@@ -226,11 +230,6 @@ public class Perfil extends AppCompatActivity {
         startActivity(intent3);
     }
 
-    private void avisoprivacidad() {
-        Intent intent4 = new Intent(this, AvisoPrivacidad.class);
-
-        startActivity(intent4);
-    }
 
     private void ayuda() {
 
@@ -249,6 +248,12 @@ public class Perfil extends AppCompatActivity {
         Intent intent7 = new Intent(this, GeneradorQR.class);
 
         startActivity(intent7);
+    }
+
+    private void a_buzon(){
+        Intent intent8 = new Intent(this, Buzon_Comentarios.class);
+
+        startActivity(intent8);
     }
     private void dialogoalerta() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

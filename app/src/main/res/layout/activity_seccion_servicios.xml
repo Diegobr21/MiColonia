@@ -1,74 +1,67 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
+    android:id="@+id/nav_drawerlayoutSER"
     android:layout_width="match_parent"
-    android:background="@drawable/bckgnd1"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:theme="@style/NoActionBar"
     tools:context=".seccion_servicios"
     >
-    <com.google.android.material.appbar.AppBarLayout
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppThemeRegister"
-        >
-        <androidx.appcompat.widget.Toolbar
+        android:background="@drawable/bckgnd1">
+
+        <com.google.android.material.appbar.AppBarLayout
+
             android:layout_width="match_parent"
-            android:layout_height="50dp">
-            <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="wrap_content"
+            android:theme="@style/AppThemeRegister"
+            >
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/servicios_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:elevation="4dp">
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@drawable/casa_yellow"
-                    android:tint="@android:color/holo_orange_light"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textsaludo" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
 
-                <TextView
-                    android:id="@+id/textsaludo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="64dp"
-                    android:layout_marginLeft="64dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Servicios"
-                    android:textColor="@android:color/holo_orange_light"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_ing_perfil"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageView
-
-                    android:id="@+id/btn_ing_perfil"
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginBottom="1dp"
-                    android:background="@drawable/botoncircular"
-                    android:backgroundTint="@android:color/white"
-                    android:src="@drawable/ic_account"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/casa_yellow"
+                        android:tint="@android:color/holo_orange_light"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textsaludo" />
 
 
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+                    <TextView
+                        android:id="@+id/textsaludo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Servicios"
+                        android:textColor="@android:color/holo_orange_light"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout_serv"
         android:layout_width="match_parent"
@@ -198,3 +191,12 @@
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_servicios"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/perfil_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

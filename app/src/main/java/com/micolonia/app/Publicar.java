@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Publicar extends AppCompatActivity {
-    private Button contacto, siguiente;
+    private Button contacto, siguiente, publicaciones;
     TextView se_parte, texto, contactanos, daclick;
 
     @Override
@@ -20,7 +20,7 @@ public class Publicar extends AppCompatActivity {
         se_parte = findViewById(R.id.tituloPublicar);
         //texto=(TextView)findViewById(R.id.inicio_publicar);
         contactanos = (TextView)findViewById(R.id.conta);
-        daclick = (TextView)findViewById(R.id.daclick);
+        publicaciones = findViewById(R.id.btn_mispublicaciones);
 
       //
        // texto.setText(Html.fromHtml(textolargo), TextView.BufferType.SPANNABLE);
@@ -44,6 +44,13 @@ public class Publicar extends AppCompatActivity {
                 verformato();
             }
         });
+
+        publicaciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mispublicaciones();
+            }
+        });
     }
 
     public void vercontacto(){
@@ -55,5 +62,11 @@ public class Publicar extends AppCompatActivity {
         Intent intentformato = new Intent(this, seleccionar.class);
         startActivity(intentformato);
 
+    }
+
+    private void mispublicaciones(){
+        Intent intpub = new Intent(this, MisPublicaciones.class);
+
+        startActivity(intpub);
     }
 }

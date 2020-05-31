@@ -120,6 +120,20 @@
                 tools:targetApi="o" />
 
             <EditText
+                android:id="@+id/dir_negservicio"
+                android:layout_width="330dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:hint="Direccion (Opcional)"
+                android:textAlignment="center"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contac_negservicio"
+                tools:targetApi="o" />
+
+            <EditText
                 android:id="@+id/desc_negservicio"
                 android:layout_width="330dp"
                 android:layout_height="64dp"
@@ -129,7 +143,7 @@
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contac_negservicio"
+                app:layout_constraintTop_toBottomOf="@+id/dir_negservicio"
                 tools:targetApi="o" />
 
             <ImageButton
@@ -245,12 +259,28 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/botoncircular"
                 android:backgroundTint="@android:color/holo_red_light"
-                android:text="Guardar"
+                android:text="Publicar"
                 android:textColor="@color/amarillo"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/servicio6" />
+
+            <Button
+
+                android:id="@+id/btn_actualizar_servicios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/botoncircular"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="Actualizar"
+                android:textColor="@color/amarillo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/servicio6"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <Button
                 android:id="@+id/btn_ini3"

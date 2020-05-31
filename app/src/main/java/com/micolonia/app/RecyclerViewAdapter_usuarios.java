@@ -22,7 +22,7 @@ class RecyclerViewAdapter_usuarios extends RecyclerView.Adapter<RecyclerViewAdap
 
     public class UsuariosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
-        TextView nombre_usu;
+        //TextView nombre_usu;
         //TextView email_usu;
         TextView calle_usu;
         TextView num_calle_usu;
@@ -32,7 +32,7 @@ class RecyclerViewAdapter_usuarios extends RecyclerView.Adapter<RecyclerViewAdap
         UsuariosViewHolder(View itemView, OnUsuarioListener onUsuarioListener) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.cardView_usuarios);
-            nombre_usu = (TextView) itemView.findViewById(R.id.nombre_usu_C);
+            //nombre_usu = (TextView) itemView.findViewById(R.id.nombre_usu_C);
             //email_usu = (TextView) itemView.findViewById(R.id.correo_usu_C);
             calle_usu = (TextView) itemView.findViewById(R.id.calle_usu_C);
             num_calle_usu = (TextView) itemView.findViewById(R.id.num_calle_usu_C);
@@ -56,7 +56,7 @@ class RecyclerViewAdapter_usuarios extends RecyclerView.Adapter<RecyclerViewAdap
 
     @Override
     public void onBindViewHolder(UsuariosViewHolder holder, int position) {
-        holder.nombre_usu.setText(arrayusuarios.get(position).nombre);
+        //holder.nombre_usu.setText(arrayusuarios.get(position).nombre);
         //holder.email_usu.setText(arrayusuarios.get(position).email);
         holder.calle_usu.setText(arrayusuarios.get(position).nombre_calle);
         holder.num_calle_usu.setText(arrayusuarios.get(position).num_calle);

@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Publicar"
+    android:background="@drawable/bckgnd1"
     >
 
 
@@ -25,18 +26,10 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/inicio_publicar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15sp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="15dp"
-        android:text="@string/textopublicar"
-        android:textColor="@color/black" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="400dp">
@@ -45,54 +38,67 @@
             android:id="@+id/btn_contacto1"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/contacto"
             android:textColor="@color/amarillo"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.536"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/conta" />
 
         <Button
             android:id="@+id/btn_sig_publicar"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/botoncircular"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:text="Siguiente"
             android:textColor="@color/amarillo"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="8dp"
+            android:drawableLeft="@drawable/ic_create_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/daclick"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Si ya nos contactaste o quieres entrar a lista de espera, da click"
-            android:textSize="17sp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@+id/btn_sig_publicar"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_contacto1" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_mispublicaciones" />
+
+        <Button
+            android:id="@+id/btn_mispublicaciones"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/botoncircular"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/ic_storage_black_24dp"
+            android:padding="8dp"
+            android:text="Mis Publicaciones"
+            android:textColor="@color/amarillo"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.594"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></Button>
 
         <TextView
             android:id="@+id/conta"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:text="¡Contactanos, con gusto te atenderemos!"
+            android:textColor="@color/black"
+            android:textAlignment="center"
             android:textSize="17sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.405"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_sig_publicar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
